@@ -1,0 +1,47 @@
+ssh root@143.198.82.100
+FawcdTgk789f
+
+server {
+  listen 80;
+  server_name sportstalentasia.com
+
+  location / {
+    proxy_pass http://localhost:3000;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection 'upgrade';
+    proxy_set_header Host $host;
+    proxy_cache_bypass $http_upgrade;
+  }
+}
+
+
+server {
+    listen 80;
+    server_name sportstalentasia.com;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+sudo certbot --nginx -d sportstalentasia.com -d www.sportstalentasia.com
+
+
+/var/www/html/players-portal-2/public/sql-to-import.sql
+
+sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
+
+
+mysql -u players_portal_2 -p database_name < /var/www/html/players-portal-2/public/sql-to-import.sql
+
+
+mysql -u players_portal_2 -p players_portal_2 < /var/www/html/players-portal-2/public/sql-to-import.sql
+
+
+sudo certbot --nginx -d  www.sportstalentasia.
+com

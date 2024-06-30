@@ -59,4 +59,11 @@ export  async function GET(request) {
         if(err) console.log(err);
     })
 
+    return new Response(JSON.stringify({ success: false, msg: 'Setup'  }), {
+        headers: {
+            "Content-Type": "application/json"
+        },
+        status: 200
+    });
+
 }

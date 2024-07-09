@@ -38,6 +38,7 @@ export  async function POST(request) {
                 Key = generateRandomString(20) + '.' + mediaExt
             }
 
+            
             const params = {
                 Bucket: process.env.S3_BUCKET_NAME,
                 Key,

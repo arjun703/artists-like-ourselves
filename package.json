@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.606.0",
+    "@aws-sdk/lib-storage": "^3.613.0",
     "@dnd-kit/sortable": "^8.0.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",

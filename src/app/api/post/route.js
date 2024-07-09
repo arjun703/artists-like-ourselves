@@ -1,6 +1,7 @@
 import {generateRandomString, generateToken, databaseConnection , executeQuery, getLoggedInUsername} from '@/app/api/utils'
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client } from '@aws-sdk/client-s3';
 import { Readable } from 'stream';
+import { Upload } from '@aws-sdk/lib-storage';
 
 export  async function POST(request) {
 
@@ -20,27 +21,47 @@ export  async function POST(request) {
         let media_src = ''
 
         if(media && media.name){
-
             const client = new S3Client({
-                forcePathStyle: true,
-                region: 'us-east-1',
-                endpoint: process.env.S3_ENDPOINT,
+                region: process.env.S3_REGION,
                 credentials: {
                   accessKeyId: process.env.S3_ACCESS_KEY_ID,
                   secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
                 }
             })
-
+            let Key = ''
             const mediaStream = Readable.from(media.stream());
-            const Key = generateRandomString(20) + media.name
-            const command = new PutObjectCommand({
+            const parts = media.name.split('.');
+            const mediaExt = parts.length > 1 ? parts.pop() : null;
+            if(mediaExt === null){
+                throw(new Error('Extension not found'))
+            }else{
+                Key = generateRandomString(20) + '.' + mediaExt
+            }
+
+            const params = {
                 Bucket: process.env.S3_BUCKET_NAME,
                 Key,
-                Body:mediaStream,
-            });
+                Body:mediaStream
+            };
 
-            const response = await client.send(command);
-            media_src = process.env.SUPABASE_PROJECT_ENDPOINT +'/' + process.env.SUPABASE_UPLOAD_PATH + '/' + process.env.S3_BUCKET_NAME + '/'+Key
+            const upload = new Upload({
+                client: client,
+                params: params,
+              });
+          
+            const data = await upload.done();
+          
+            // Generate the URL in the desired format
+            media_src = `https://s3.amazonaws.com/${params.Bucket}/${params.Key}`;
+
+            // const command = new PutObjectCommand({
+            //     Bucket: process.env.S3_BUCKET_NAME,
+            //     Key,
+            // });
+
+            // const response = await client.send(command);
+            console.log(data)
+            // media_src = process.env.SUPABASE_PROJECT_ENDPOINT +'/' + process.env.SUPABASE_UPLOAD_PATH + '/' + process.env.S3_BUCKET_NAME + '/'+Key
         
         }
 
@@ -63,6 +84,7 @@ export  async function POST(request) {
         if(result){
             if(media_src.trim().length > 0){
 
+                
                 query = `
                     INSERT INTO posts_media
                     (id, post_id, media_src, media_type) 

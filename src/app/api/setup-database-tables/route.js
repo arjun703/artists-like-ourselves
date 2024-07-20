@@ -42,6 +42,7 @@ export  async function GET(request) {
     result = await executeQuery(connection, query)
     console.log(result)
 
+    
     query = `
         CREATE TABLE IF NOT EXISTS posts_media(
             id VARCHAR(255),

@@ -10,9 +10,9 @@ export default function DisplaySelectedFiltersChips({filters, handleDelete}){
                 {
                     filters.map( (filter, index) => {
                         return(
-                            <Grid item auto>
+                            <Grid key={index} item auto>
                                 <Chip
-                                    key={index}
+                                    
                                     color="success"
                                     label={filter}
                                     onClick={() => {handleDelete(filter)}}

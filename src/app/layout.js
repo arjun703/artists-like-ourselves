@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
+import { Toaster } from "react-hot-toast";
 
 export const metadata = {
   title: "Artists Like Ourselves",
@@ -12,7 +13,19 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head> 
       <script src="https://accounts.google.com/gsi/client" async></script>      </head>
-      <body  style={{backgroundColor: 'rgba(0, 0, 0, 0.1)', overflowX: 'hidden!important'}} className={inter.className}>{children}</body>
+      <body  style={{backgroundColor: 'rgba(0, 0, 0, 0.1)', overflowX: 'hidden!important'}} className={inter.className}>
+        <Toaster  position="bottom-center" 
+          toastOptions={{
+            className: '',
+            style: {
+              backgroundColor: 'black',
+              padding: '8px',
+              color: 'white',
+            },
+          }}
+        />
+        {children}
+      </body>
     </html>
   );
 }

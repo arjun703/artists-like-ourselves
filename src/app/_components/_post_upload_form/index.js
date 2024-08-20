@@ -9,7 +9,7 @@ import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import VideoCameraBackIcon from '@mui/icons-material/VideoCameraBack';
 import MicIcon from '@mui/icons-material/Mic';
 import {pOSTRequest, dELETErequest} from '@/app/_components/file_upload';
-
+import AssignmentIcon from '@mui/icons-material/Assignment';
 
 const PostUploadForm = ({ onClose }) => {
   
@@ -105,7 +105,7 @@ const PostUploadForm = ({ onClose }) => {
           left: '50%',
           transform: 'translate(-50%, -50%)',
           width: '90%',
-          maxWidth: 400,
+          maxWidth: 500,
           bgcolor: 'background.paper',
           boxShadow: 24,
           p: 4,
@@ -146,12 +146,12 @@ const PostUploadForm = ({ onClose }) => {
         {
           !media ? 
 
-            <div style={{display: 'flex', justifyContent: 'space-around'}}>
+            <div style={{marginTop:'20px', display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', alignItems:'center'}}>
               <Button
                 variant="outlined"
                 component="label"
                 startDecorator={<PhotoCameraIcon />}
-                sx={{ marginTop: '20px', marginBottom:'20px'  }}
+                sx={{  marginBottom:'20px'  }}
               >
                 Photo
                 <input
@@ -166,7 +166,7 @@ const PostUploadForm = ({ onClose }) => {
                 variant="outlined"
                 startDecorator={<VideoCameraBackIcon />}
                 component="label"
-                sx={{ marginTop: '20px', marginBottom:'20px'  }}
+                sx={{  marginBottom:'20px'  }}
               >
                 Video
                 <input
@@ -181,12 +181,28 @@ const PostUploadForm = ({ onClose }) => {
                 variant="outlined"
                 component="label"
                 startDecorator={<MicIcon />}
-                sx={{ marginTop: '20px', marginBottom:'20px'  }}
+                sx={{ marginBottom:'20px'  }}
               >
                 Audio
                 <input
                   type="file"
                   accept="audio/*"
+                  style={{ display: 'none' }}
+                  onChange={handleFileChange}
+                />
+              </Button>
+
+
+              <Button
+                variant="outlined"
+                component="label"
+                startDecorator={<AssignmentIcon />}
+                sx={{ marginBottom:'20px'  }}
+              >
+                Text
+                <input
+                  type="file"
+                  accept=".doc, .docx, .txt, .pdf"
                   style={{ display: 'none' }}
                   onChange={handleFileChange}
                 />

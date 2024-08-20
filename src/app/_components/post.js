@@ -37,7 +37,7 @@ export default function Post({post}) {
         subheader={'just now'}
       />
       <DisplayCardContent caption={post.caption} />
-      <DisplayCardMedia medias={post.medias} />
+      <DisplayCardMedia post={post} />
 
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">
@@ -66,53 +66,48 @@ function DisplayCardContent({caption}){
   )
 }
 
-function DisplayCardMedia({medias}){
-  if(!medias.length){
+function DisplayCardMedia({post}){
+  if(post.media_src === null){
     return(
       <></>
     )
   }
-  const media = medias[0]
-
-  let component = 'img'
   
-  if(media.media_type.includes('video')){
+  if(post.media_type.includes('video')){
     return(
       <CardMedia
         component={'video'}
         width="100%"
         controls={true}
         height="auto"
-        src={media.media_src}
+        src={post.media_src}
         alt="Paella dish"
       />
     )
-  }else if(media.media_type.includes('audio')){
+  }else if(post.media_type.includes('audio')){
     return(
       <CardMedia
         component={'audio'}
         width="100%"
         controls={true}
         height="auto"
-        src={media.media_src}
+        src={post.media_src}
         alt="Paella dish"
       />
     )
-  }else if(media.media_type.includes('image')){
+  }else if(post.media_type.includes('image')){
     return(
       <CardMedia
         component={'img'}
         width="100%"
         height="auto"
-        src={media.media_src}
+        src={post.media_src}
         alt="Paella dish"
       />
     )
   }else{
     return(
-      <p>
-        Unsupoorted file type
-      </p>
+      <a href={post.media_src} download>Download file</a>
     )
   }
 

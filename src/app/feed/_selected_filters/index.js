@@ -12,7 +12,6 @@ export default function DisplaySelectedFiltersChips({filters, handleDelete}){
                         return(
                             <Grid key={index} item auto>
                                 <Chip
-                                    
                                     color="success"
                                     label={filter}
                                     onClick={() => {handleDelete(filter)}}

@@ -14,7 +14,6 @@ import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useState, useEffect, useRef } from 'react';
-import ReactHowler from 'react-howler';
 
 
 export default function Post({post}) {
@@ -67,8 +66,6 @@ function DisplayCardContent({caption}){
   </CardContent>
   )
 }
-
-import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
 
 
 function DisplayCardMedia({p}){

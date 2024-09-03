@@ -13,15 +13,17 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import ReactHowler from 'react-howler';
 
 
-export default function Post({post}) {
+export default function p({post}) {
    
   const [isLiked, setIsLiked] = useState(false)
+  var [p, setP] = useState(post);
 
   return (
-    <Card id={post.id} sx={{ maxWidth: '100%', borderRadius: '10px', marginBottom: '20px' }}>
+    <Card id={p.id} sx={{ maxWidth: '100%', borderRadius: '10px', marginBottom: '20px' }}>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -36,8 +38,8 @@ export default function Post({post}) {
         title={'Arjun Poudel'}
         subheader={'just now'}
       />
-      <DisplayCardContent caption={post.caption} />
-      <DisplayCardMedia post={post} />
+      <DisplayCardContent caption={p.caption} />
+      <DisplayCardMedia p={p} />
 
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">
@@ -66,51 +68,72 @@ function DisplayCardContent({caption}){
   )
 }
 
-function DisplayCardMedia({post}){
-  if(post.media_src === null){
+import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
+
+
+function DisplayCardMedia({p}){
+  if(p.media_src === null){
     return(
       <></>
     )
   }
   
-  if(post.media_type.includes('video')){
+  if(p.media_type.includes('video')){
     return(
       <CardMedia
         component={'video'}
         width="100%"
         controls={true}
         height="auto"
-        src={post.media_src}
+        src={p.media_src}
         alt="Paella dish"
       />
     )
-  }else if(post.media_type.includes('audio')){
+  }else if(p.media_type.includes('audio')){
     return(
-      <CardMedia
-        component={'audio'}
-        width="100%"
-        controls={true}
-        height="auto"
-        src={post.media_src}
-        alt="Paella dish"
-      />
+      <div style={{display:'flex', gap: '15px'}}>
+        <div></div>
+        <audio controls style={{width: '100%'}}>
+          <source src={p.media_src} type={p.media_type} />
+        </audio>
+        <div></div>
+      </div>
     )
-  }else if(post.media_type.includes('image')){
+  }else if(p.media_type.includes('image')){
     return(
       <CardMedia
         component={'img'}
         width="100%"
         height="auto"
-        src={post.media_src}
+        src={p.media_src}
         alt="Paella dish"
       />
     )
   }else{
+
+
+
+    if(p.media_type.includes('pdf') || p.media_type.includes('text') ){
+      return(
+        <div>
+          <embed
+            src={p.media_src}
+            style={{ border: 'none', width: '100%', minHeight: '350px' }}
+            title="PDF Viewer"
+            onError={() => {}}
+          />
+        </div>
+      )
+    }
+
+    const docs = [
+      { uri: p.media_src },
+    ];
+
     return(
-      <a href={post.media_src} download>Download file</a>
+      <div style={{padding: '5px', marginBottom:'5px'}}>
+        <DocViewer style={{height: '350px'}} documents={docs} pluginRenderers={DocViewerRenderers} />
+      </div>
     )
   }
-
-
-
 }

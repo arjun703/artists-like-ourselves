@@ -42,7 +42,8 @@ export  async function POST(request) {
             const params = {
                 Bucket: process.env.S3_BUCKET_NAME,
                 Key,
-                Body:mediaStream
+                Body:mediaStream,
+                ContentType: media.type
             };
 
             const upload = new Upload({

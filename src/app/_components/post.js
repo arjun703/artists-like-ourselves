@@ -17,7 +17,7 @@ import { useState, useEffect, useRef } from 'react';
 import ReactHowler from 'react-howler';
 
 
-export default function p({post}) {
+export default function Post({post}) {
    
   const [isLiked, setIsLiked] = useState(false)
   var [p, setP] = useState(post);

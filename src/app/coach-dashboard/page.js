@@ -20,7 +20,6 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Stack from '@mui/material/Stack';
-import Post from '../_components/post';
 import { useState, useEffect } from 'react';
 import Button from '@mui/joy/Button';
 import { setLazyProp } from 'next/dist/server/api-utils';

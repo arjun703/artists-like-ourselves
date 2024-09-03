@@ -111,16 +111,29 @@ function DisplayCardMedia({p}){
     )
   }else{
 
-
-
-    if(p.media_type.includes('pdf') || p.media_type.includes('text') ){
+    if(p.media_type.includes('application/pdf') || p.media_type.includes('text/plain') ){
       return(
         <div>
           <embed
+            allowDownloads="false"
             src={p.media_src}
             style={{ border: 'none', width: '100%', minHeight: '350px' }}
             title="PDF Viewer"
-            onError={() => {}}
+            onLoad={()=>{console.log("erorred out")}}
+            onError={() => {console.log("errorr in previeweing")}}
+          />
+        </div>
+      )
+    }else if(p.media_type.includes('document')){
+      return(
+        <div>
+          <embed
+            allowDownloads="false"
+            src={'https://view.officeapps.live.com/op/embed.aspx?src='+p.media_src}
+            style={{ border: 'none', width: '100%', minHeight: '350px' }}
+            title="PDF Viewer"
+            onLoad={()=>{console.log("errored out")}}
+            onError={() => {console.log("error in previewing ")}}
           />
         </div>
       )
@@ -132,7 +145,7 @@ function DisplayCardMedia({p}){
 
     return(
       <div style={{padding: '5px', marginBottom:'5px'}}>
-        <DocViewer style={{height: '350px'}} documents={docs} pluginRenderers={DocViewerRenderers} />
+        Unsupported file type {p.media_type}
       </div>
     )
   }

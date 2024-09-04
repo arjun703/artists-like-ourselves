@@ -108,42 +108,17 @@ function DisplayCardMedia({p}){
     )
   }else{
 
-    if(p.media_type.includes('application/pdf') || p.media_type.includes('text/plain') ){
-      return(
-        <div>
-          <embed
-            allowDownloads="false"
-            src={p.media_src}
-            style={{ border: 'none', width: '100%', minHeight: '350px' }}
-            title="PDF Viewer"
-            onLoad={()=>{console.log("erorred out")}}
-            onError={() => {console.log("errorr in previeweing")}}
-          />
-        </div>
-      )
-    }else if(p.media_type.includes('document')){
-      return(
-        <div>
-          <embed
-            allowDownloads="false"
-            src={'https://view.officeapps.live.com/op/embed.aspx?src='+p.media_src}
-            style={{ border: 'none', width: '100%', minHeight: '350px' }}
-            title="PDF Viewer"
-            onLoad={()=>{console.log("errored out")}}
-            onError={() => {console.log("error in previewing ")}}
-          />
-        </div>
-      )
-    }
 
-    const docs = [
-      { uri: p.media_src },
-    ];
+    const googleDocsViewerUrl = `https://docs.google.com/gview?url=${p.media_src}&embedded=true`;
 
-    return(
-      <div style={{padding: '5px', marginBottom:'5px'}}>
-        Unsupported file type {p.media_type}
-      </div>
-    )
+    return (
+      <iframe
+        src={googleDocsViewerUrl}
+        style={{ border: 'none', width: '100%', minHeight: '350px' }}
+        title="PDF Viewer"
+      />
+    );
+
+
   }
 }

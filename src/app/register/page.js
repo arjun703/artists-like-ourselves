@@ -10,9 +10,10 @@ import Paper from '@mui/material/Paper';
 import useLang from '../_components/uselang';
 import { useState, useEffect } from 'react';
 import { Divider } from '@mui/material';
-import GoogleSignIn from '../_components/google-sign-in';
 import { pOSTRequest, uPDATErequest, dELETErequest } from '@/app/_components/file_upload';
 import { useRouter } from "next/navigation";
+
+import GoogleSignInButton from '../login/_google-sign-in';
 
 export default function LandingPage(){
     
@@ -70,6 +71,8 @@ export default function LandingPage(){
                                 <Paper sx={{padding: '30px', borderRadius: '0px'}} elevation={3}>
                                         
                                     <Stack spacing={2}>
+                                        <GoogleSignInButton />                              
+                                        <Divider></Divider>
                                         <TextField onChange={(e)=>setName(e.target.value.trim())} label="Name" variant="outlined" fullWidth  />
                                         <TextField onChange={(e)=>setEmail(e.target.value.trim())} label="Email" variant="outlined" fullWidth  />
                                         <TextField  onChange={(e)=>setPassword(e.target.value.trim())}  type="password" label="Password" variant="outlined"  fullWidth  />
@@ -81,7 +84,7 @@ export default function LandingPage(){
                                             onClick={handleRegister}
                                         >
                                             {lang.sign_up_text}
-                                        </Button>                                  
+                                        </Button>    
                                     </Stack>  
                                 </Paper>
                             </Grid>

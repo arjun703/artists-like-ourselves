@@ -10,11 +10,11 @@ import Paper from '@mui/material/Paper';
 import useLang from '../_components/uselang';
 import Link from 'next/link'
 import Divider from '@mui/material/Divider';
-import GoogleSignIn from '../_components/google-sign-in';
 import { useRouter } from "next/navigation";
 import { pOSTRequest, uPDATErequest, dELETErequest } from '@/app/_components/file_upload';
 import { setMaxListeners } from 'events';
 import { useState } from 'react';
+import GoogleSignInButton from './_google-sign-in';
 
 export default function LandingPage(){
 
@@ -67,7 +67,8 @@ export default function LandingPage(){
                             <Grid item lg={6} xs={12}>
                                 <Paper sx={{padding: '30px', borderRadius: '0PX'}}  elevation={3}>
                                     <Stack spacing={2}>
-
+                                        <GoogleSignInButton />                              
+                                        <Divider> or </Divider>
                                         <TextField  
                                             label="Username or Email" 
                                             variant="outlined"

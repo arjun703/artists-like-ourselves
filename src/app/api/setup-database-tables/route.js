@@ -7,9 +7,11 @@ export  async function GET(request) {
     // Save the title and filenames in the MySQL database
     let query = `
         CREATE TABLE IF NOT EXISTS users(
-            username VARCHAR(255),
+            username VARCHAR(255) PRIMARY KEY,
             email VARCHAR(255),
             password VARCHAR(255),
+            google_id VARCHAR(1000),
+            facebook_id VARCHAR(1000)
             PRIMARY KEY(username)
         )
     `;

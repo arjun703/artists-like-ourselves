@@ -11,7 +11,7 @@ export  async function GET(request) {
             email VARCHAR(255),
             password VARCHAR(255),
             google_id VARCHAR(1000),
-            facebook_id VARCHAR(1000)
+            facebook_id VARCHAR(1000),
             PRIMARY KEY(username)
         )
     `;

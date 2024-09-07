@@ -22,20 +22,30 @@ const FacebookSignIn = () => {
     console.log(response);
   }
 
+  const [facebookButtonLoading, setFacebookButtonLoading] = useState(true)
 
-  // return (
-  //   <div>
-  //     <Button onClick={checkLoginState} fullWidth startDecorator={<FacebookIcon />} >Sign in with Facebook</Button>
-  //   </div>
-  // );
+  useEffect(()=>{
+    var finished_rendering = function() {
+      setFacebookButtonLoading(false)
+    }
+    FB.Event.subscribe('xfbml.render', finished_rendering);
+
+  }, [])
+
+  if(facebookButtonLoading){
+    return (
+      <div>
+        <Button loading={true} >Sign in with Facebook</Button>
+      </div>
+    );
+  }
 
   return(
     <div 
       scope="public_profile,email"
       onlogin="checkLoginState();" 
       className="fb-login-button" 
-      data-width="" 
-      data-size="" 
+      data-size="large" 
       data-button-type="continue_with" 
       data-layout="" 
       data-auto-logout-link="false" 
@@ -43,6 +53,8 @@ const FacebookSignIn = () => {
     >
 
     </div>
+
+
   )
 
 };

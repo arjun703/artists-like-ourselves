@@ -61,7 +61,6 @@ export default function GoogleSignInButton() {
           <Button loading={true}>Logging in</Button>
         ): (
           <GoogleLogin
-            style={{width: '100%'}}
             onSuccess={handleLoginSuccess}
             onError={handleLoginFailure}
           />

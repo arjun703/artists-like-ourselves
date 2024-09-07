@@ -3,6 +3,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 import { Toaster } from "react-hot-toast";
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import Script from 'next/script'
 
 export const metadata = {
   title: "Artists Like Ourselves",
@@ -10,24 +11,28 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+
   return (
     <html lang="en">
       <head> 
-      <script src="https://accounts.google.com/gsi/client" async></script>      </head>
+      </head>
       <body  style={{backgroundColor: 'rgba(0, 0, 0, 0.1)', overflowX: 'hidden!important'}} className={inter.className}>
-        <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID}>
-          <Toaster  position="bottom-center" 
-            toastOptions={{
-              className: '',
-              style: {
-                backgroundColor: 'black',
-                padding: '8px',
-                color: 'white',
-              },
-            }}
-          />
-          {children}
-        </GoogleOAuthProvider>
+        <div id="fb-root">
+          <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v20.0&appId=1063570588546433" nonce="w9JP03ra"></script>
+          <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID}>
+            <Toaster  position="bottom-center" 
+              toastOptions={{
+                className: '',
+                style: {
+                  backgroundColor: 'black',
+                  padding: '8px',
+                  color: 'white',
+                },
+              }}
+            />
+            {children}
+          </GoogleOAuthProvider>
+        </div>
       </body>
     </html>
   );

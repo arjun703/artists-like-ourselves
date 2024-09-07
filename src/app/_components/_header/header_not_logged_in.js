@@ -119,12 +119,10 @@ function LoginAndSignUpButtons(){
   const router = useRouter()
   return(
     <>
-              <Button onClick={()=> router.push('/login')} sx={{display: {xs: 'none', lg: 'flex'}}} variant='outlined'>
-            Login
-          </Button>
-          <Button onClick={()=> router.push('/register')} sx={{display: {xs: 'none', lg: 'flex'}}} variant='solid'>
-            Sign Up
-          </Button></>
+      <Button onClick={()=> router.push('/login')} sx={{minWidth:'200px', display: {xs: 'none', lg: 'flex'}}} >
+        Sign In
+      </Button>
+    </>
   )
 }
 

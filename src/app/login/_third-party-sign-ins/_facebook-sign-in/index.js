@@ -10,6 +10,8 @@ const FacebookSignIn = () => {
 
   function checkLoginState() {
     FB.getLoginStatus(function(response) {
+      console.log("response from facebook")
+      console.log(response)
       statusChangeCallback(response);
     });
   }
@@ -22,12 +24,12 @@ const FacebookSignIn = () => {
 
   useEffect(()=>{
     var finished_rendering = function() {
-      console.log("hellllllllllllllllllllllllllllllllo")
+      console.log("finsidhed rendering")
       setFacebookButtonLoading(false)
     }
     FB.Event.subscribe('xfbml.render', finished_rendering);
-    console.log(FB)
-    console.log("hellllllllll")
+    
+    console.log("started rendering")
   }, [])
 
   // if(facebookButtonLoading){

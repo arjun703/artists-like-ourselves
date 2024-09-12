@@ -18,7 +18,6 @@ export default function RootLayout({ children }) {
       </head>
       <body  style={{backgroundColor: 'rgba(0, 0, 0, 0.1)', overflowX: 'hidden!important'}} className={inter.className}>
         <div id="fb-root">
-          <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v20.0&appId=1063570588546433" nonce="w9JP03ra"></script>
           <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID}>
             <Toaster  position="bottom-center" 
               toastOptions={{

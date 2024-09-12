@@ -2,59 +2,62 @@
 import React, { useEffect, useState } from 'react';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import { Button } from '@mui/joy';
+import toast from 'react-hot-toast';
 
 const FacebookSignIn = () => {
   const [userData, setUserData] = useState(null);
 
+  function statusChangeCallback(response) {  // Called with the results from FB.getLoginStatus().
+    console.log('statusChangeCallback');
+    console.log(response);                   // The current login status of the person.
+    if (response.status === 'connected') {   // Logged into your webpage and Facebook.
+      testAPI();  
+    } else {                                 // Not logged into your webpage or we are unable to tell.
+      toast("Couldn't sign in with facebook")
+    }
+  }
 
 
-  function checkLoginState() {
-    FB.getLoginStatus(function(response) {
-      console.log("response from facebook")
-      console.log(response)
-      statusChangeCallback(response);
+
+  function openFacebookPopup(){
+    FB.login(function(response) {
+      statusChangeCallback(response)
     });
   }
 
-  const statusChangeCallback = response => {
-    console.log(response);
+
+  function testAPI() {                      // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
+    console.log('Welcome!  Fetching your information.... ');
+    FB.api('/me', function(response) {
+      console.log('Successful login for: ' + response.name);
+      document.getElementById('status').innerHTML =
+        'Thanks for logging in, ' + response.name + '!';
+    });
   }
 
-  const [facebookButtonLoading, setFacebookButtonLoading] = useState(true)
+  useEffect(() => {
 
-  useEffect(()=>{
-    var finished_rendering = function() {
-      console.log("finsidhed rendering")
-      setFacebookButtonLoading(false)
-    }
-    FB.Event.subscribe('xfbml.render', finished_rendering);
-    
-    console.log("started rendering")
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '1063570588546433',
+        cookie     : true,                     // Enable cookies to allow the server to access the session.
+        xfbml      : true,                     // Parse social plugins on this webpage.
+        version    : 'v20.0'           // Use this Graph API version for this call.
+      });
+  
+  
+      FB.getLoginStatus(function(response) {   // Called after the JS SDK has been initialized.
+        statusChangeCallback(response);        // Returns the login status.
+      });
+
+    };
+  
+
   }, [])
 
-  // if(facebookButtonLoading){
-  //   return (
-  //     <div>
-  //       <Button loading={true} >Sign in with Facebook</Button>
-  //     </div>
-  //   );
-  // }
 
   return(
-    <div 
-      scope="public_profile,email"
-      onlogin="checkLoginState();" 
-      className="fb-login-button" 
-      data-size="large" 
-      data-button-type="continue_with" 
-      data-layout="" 
-      data-auto-logout-link="false" 
-      data-use-continue-as="true"
-    >
-
-    </div>
-
-
+    <Button onClick={openFacebookPopup} startDecorator={<FacebookIcon />}>Sign in with Facebook</Button>
   )
 
 };

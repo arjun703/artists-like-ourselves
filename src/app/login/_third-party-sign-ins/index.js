@@ -14,7 +14,6 @@ export default function ThirdPartySignIns(){
             <Alert severity="info">
                 Please choose one of following social logins to get started.
             </Alert>
-            <Divider></Divider>
             <div style={{display:'flex', justifyContent:'center'}}>
                 <GoogleSignInButton />
             </div>

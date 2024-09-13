@@ -1,4 +1,3 @@
-// app/components/GoogleSignInButton.js
 'use client';
 
 import { GoogleLogin } from '@react-oauth/google';
@@ -58,7 +57,7 @@ export default function GoogleSignInButton() {
       {
         isLoading
         ? (
-          <Button loading={true}>Logging in</Button>
+          <Button style={{minWidth: '250px'}} loading={true}>Logging in</Button>
         ): (
           <GoogleLogin
             onSuccess={handleLoginSuccess}

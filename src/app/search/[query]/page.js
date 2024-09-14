@@ -9,7 +9,6 @@ import ShareIcon from '@mui/icons-material/Share';
 import Link from 'next/link'
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
-import Header from '@/app/_components/_header/header';
 import Avatar from '@mui/material/Avatar';
 
 import { styled } from '@mui/material/styles';
@@ -72,7 +71,6 @@ export default function SearchResults({params}) {
 
   return (
     <>
-      <Header  user={true} />
       <Container sx={{marginTop: '30px'}} maxWidth="md">
         <Paper sx={{paddingTop: '10px', paddingBottom: '20px' }}>
           {

@@ -10,6 +10,7 @@ import VideoCameraBackIcon from '@mui/icons-material/VideoCameraBack';
 import MicIcon from '@mui/icons-material/Mic';
 import {pOSTRequest, dELETErequest} from '@/app/_components/file_upload';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import toast from 'react-hot-toast';
 
 const PostUploadForm = ({ onClose }) => {
   
@@ -17,6 +18,7 @@ const PostUploadForm = ({ onClose }) => {
   const [media, setMedia] = useState(false)
   const [fileName, setFileName] = useState('')
   const [isUploadSuccess, setIsUploadSuccess] = useState(false)
+  const [post_id, setPostID] = useState('')
   const handleConfirm = () => {
     // Logic to handle confirmation of the new profile image (newProfileImage)
     onClose();
@@ -32,13 +34,13 @@ const PostUploadForm = ({ onClose }) => {
         formData.append('media', media);
         formData.append('caption', caption);
         const result = await pOSTRequest(formData, '/api/post/')
-        if(result.success){
-          setIsUploadSuccess(result.post)
+        if(result.success === true){
+          setPostID(result.post_id)
         }else{
           throw new Error(result.msg);
         }
       }catch(error){
-        console.error(error)
+        toast(error.message)
       }finally{
         setIsUploading(false)
       }
@@ -83,10 +85,10 @@ const PostUploadForm = ({ onClose }) => {
     setCaption(textarea.value)
   }
 
-  if(isUploadSuccess){
+  if(post_id !== ''){
     return(
       <>
-        <UploadSuccessMessage post={isUploadSuccess} onClose={onClose} />
+        <UploadSuccessMessage post_id={post_id} onClose={onClose} />
       </>
     )
   }
@@ -231,10 +233,11 @@ const PostUploadForm = ({ onClose }) => {
 };
 
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+
 import Link from 'next/link';
 
+const UploadSuccessMessage =  ({post_id, onClose}) => {
 
-const UploadSuccessMessage =  ({post, onClose}) =>{
 return(
   <>
     <Modal
@@ -275,7 +278,7 @@ return(
           component="label"
           sx={{ marginTop: '20px', minWidth:'250px', marginBottom:'20px'  }}
         >
-        <Link href={`/posts/${post.id}`} style={{textDecoration:'none', color:'inherit'}}>
+        <Link href={`/posts/${post_id}`} style={{textDecoration:'none', color:'inherit'}}>
             View Post          
         </Link>
         </Button>

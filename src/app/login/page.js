@@ -1,5 +1,4 @@
 'use client'
-import Header from '@/app/_components/_header/header';
 
 import Container from '@mui/material/Container';
 
@@ -14,7 +13,6 @@ export default function LandingPage(){
 
     return (
         <div>
-            <Header user={false} />
             <Container maxWidth="xs" sx={{marginTop: {xs: '30px', lg: '100px'}}} >
                 <Paper sx={{padding: '30px'}}>
                     <ThirdPartySignIns />

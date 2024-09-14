@@ -1,11 +1,12 @@
 import {retrieveAppAccessToken, verifyToken, getUserInfo} from './utils'
-  
+
+import { handleLogin } from '../utils'
+
 export  async function POST(request) {
 
     try {
 
         const data = await request.formData()
-
 
         const inputToken = data.get('token')
 
@@ -17,14 +18,22 @@ export  async function POST(request) {
           throw new Error("Error verifying user.")
         }
 
-        
+        const userInfo = await getUserInfo(inputToken)
 
-        return new Response(JSON.stringify({ success: true  }), {
-            headers: {
-                "Content-Type": "application/json"
-            },
-            status: 200
-        });
+        const loggedIn = await handleLogin(user_id, 'facebook', userInfo.name)
+        
+        if(loggedIn === true){
+            
+            return new Response(JSON.stringify({ success: true }), {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                status: 200
+            });
+
+        }else{
+            throw new Error('An error occured. Please try again.')
+        }
 
     }catch(error){
 
@@ -36,6 +45,6 @@ export  async function POST(request) {
         });
 
     }finally{
-
+        
     }
 }

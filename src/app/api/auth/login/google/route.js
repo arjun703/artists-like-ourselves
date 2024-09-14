@@ -1,7 +1,6 @@
-import {generateRandomString,databaseConnection} from '@/app/api/utils'
-
 import { OAuth2Client } from 'google-auth-library';
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+import { handleLogin } from '../utils';
 
 export  async function POST(request) {
 
@@ -17,16 +16,22 @@ export  async function POST(request) {
         });
         
         // Get the user information from the payload
-        const payload = ticket.getPayload();
+        const {sub, name} = ticket.getPayload(); // sub is id of that user in google platform
 
-        const { sub, email, name, picture } = payload;
+        const loggedIn = await handleLogin(sub, 'google', name)
+        
+        if(loggedIn === true){
+            
+            return new Response(JSON.stringify({ success: true }), {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                status: 200
+            });
 
-        return new Response(JSON.stringify({ success: true, sub, email, name, picture  }), {
-            headers: {
-                "Content-Type": "application/json"
-            },
-            status: 200
-        });
+        }else{
+            throw new Error('An error occured. Please try again.')
+        }
 
     }catch(error){
 
@@ -36,8 +41,6 @@ export  async function POST(request) {
             },
             status: 200
         });
-
-    }finally{
 
     }
 }

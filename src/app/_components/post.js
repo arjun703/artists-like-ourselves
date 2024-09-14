@@ -14,7 +14,8 @@ import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useState, useEffect, useRef } from 'react';
-
+import calculatePostedAgo from './posted-ago';
+import Link from 'next/link';
 
 export default function Post({post}) {
    
@@ -25,17 +26,21 @@ export default function Post({post}) {
     <Card id={p.id} sx={{ maxWidth: '100%', borderRadius: '10px', marginBottom: '20px' }}>
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            SB
-          </Avatar>
+          <Link href={'/users/'+p.username} style={{textDecoration:'none'}}>
+            <Avatar src={p.profile_pic_src} aria-label="recipe">
+              {
+                p.name.split(' ').map(a => a[0]).join('')
+              }
+            </Avatar>
+          </Link>
         }
         action={
           <IconButton aria-label="settings">
             <MoreVertIcon />
           </IconButton>
         }
-        title={'Arjun Poudel'}
-        subheader={'just now'}
+        title={<Link style={{textDecoration:'none'}} href={'/users/'+p.username}> {p.name}</Link>}
+        subheader={calculatePostedAgo(p.posted_ago_in_seconds)}
       />
       <DisplayCardContent caption={p.caption} />
       <DisplayCardMedia p={p} />

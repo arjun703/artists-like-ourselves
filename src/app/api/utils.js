@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import mysql from 'mysql2';
 
 export  function generateRandomString(length=20) {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
     const charactersLength = characters.length;
     for (let i = 0; i < length; i++) {
@@ -65,26 +65,34 @@ export async function comparePassword(plainPassword, hash){
   return  await bcrypt.compare(plainPassword, hash);
 }
 
-export function generateToken(email, userType='') {
+export function generateToken(username) {
   const secretKey = 'your_secret_key'; // Replace this with your own secret key
-  const payload = { email, userType };
-
+  const payload = { username };
   return jwt.sign(payload, secretKey);
 }
 
 import { cookies } from 'next/headers'
+
 export function getLoggedInUsername(){
+
   const cookieStore = cookies()
+  
   const token = cookieStore.get('token')
+  
   if(token === '' || token === null || token === undefined || token.value === undefined){
-    return '-1234232dadsfasdfdadfasfasdfafsdadsf3232'
+    return {token_exists: false}
   }
+
   const parts = token.value.split('.');
+
   const header = JSON.parse(atob(parts[0]));
+  
   const payload = JSON.parse(atob(parts[1]));
-  if(payload && payload.email !== undefined){
-    return payload.email
+  
+  if(payload && payload.username !== undefined ){
+    return {token_exists: true, username: payload.username}
   }else{
-    return '-342344444444dsdsfsdfd'
+    return {token_exists: false, username: null}
   }
+
 }

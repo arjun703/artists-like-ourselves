@@ -1,40 +1,55 @@
 'use client'
-import Header from '../_components/_header/header';
 import FeedPosts from "./feed_posts"
 import RightSidebar from "./right_side_bar"
-import { Grid } from '@mui/material';
+import { Divider, Grid, Paper } from '@mui/material';
 import {Container} from '@mui/material';
 import LeftSideBar from './_left_side_bar';
 import { useState, useEffect } from 'react';
 import DisplaySelectedFiltersChips from './_selected_filters';
 import LoadingPosts from './post_skeleton';
 import smoothScrollToTop from './smooth_scroll_to_top';
-
-
+import toast from 'react-hot-toast';
+import PostUploadForm from "../_components/_post_upload_form";
+import PostUploadFormInitiator from "./post_upload_form_initiator";
 
 export default function Feed(){
 
+  const { searchParams } = new URL(window.location.href)
+
+  const filters = searchParams.get('filter')
+
+  const [postUploadFormOpen, setPostUploadFormOpen] = useState(false)
+    
+  const handlePostUploadFormDisplay = () => {setPostUploadFormOpen(!postUploadFormOpen)}
+
   const [posts, setPosts] = useState([])
 
-  const [feedTypeFilter, setFeedTypeFilter] = useState([])
 
-  const [loading, setLoading] = useState(false)
+  const [feedTypeFilter, setFeedTypeFilter] = useState(filters?.split(',') || []) 
 
-
+  const [loading, setLoading] = useState(true)
+  
   useEffect(() => {
 
       async function fetchDashboard() {
     
         try {
-              setLoading(true)
+    
+            setLoading(true)
 
               let apiURL = '/api/feed/';
               
               let filters = [];
               
-              if(feedTypeFilter.length){
+              if(feedTypeFilter.length){ 
+                history.replaceState({}, '', '/feed?filter='+feedTypeFilter.join(',') ) 
+
                 filters.push('feedTypeFilter='+feedTypeFilter.join('||'))
+              }else{
+                history.replaceState({}, '', '/feed/')
               }
+
+
 
               let queryParams = filters.join('&') 
               
@@ -47,10 +62,9 @@ export default function Feed(){
               setPosts(postsResponseJson.success ? postsResponseJson.posts  : [])
 
           } catch (error) {
-              alert( error.message)
+            toast( error.message)
           }finally{
             setLoading(false)
-
           }
       }
       
@@ -71,13 +85,13 @@ export default function Feed(){
 
   return(
     <>
-      <Header  user={true} />
       <Container maxWidth="lg">
         <Grid container spacing={4} sx={{marginTop: '1px'}}>
           <Grid item xs={12} md={3}>
             <LeftSideBar />
           </Grid>
           <Grid item xs={12} md={6}>
+
             {
               feedTypeFilter.length 
                 ? 
@@ -90,7 +104,13 @@ export default function Feed(){
             {
               loading 
                 ? <LoadingPosts />
-                : <FeedPosts posts={posts}  />
+                : <>
+                  <Paper sx={{paddingTop: {md: '20px', xs: '20px'}, paddingBottom: '20px', paddingLeft: '20px', paddingRight:'20px' }}>
+                      <PostUploadFormInitiator handlePostUploadFormDisplay={handlePostUploadFormDisplay} />
+                  </Paper>
+                  <Divider style={{margin: '10px', opacity: 0}}></Divider>
+                  <FeedPosts posts={posts}  />
+                </>
             }
           </Grid>
           <Grid item xs={12} md={3}>
@@ -98,7 +118,9 @@ export default function Feed(){
           </Grid>
         </Grid>
       </Container>
+      {postUploadFormOpen ? <PostUploadForm onClose={handlePostUploadFormDisplay} /> : '' }
 
     </>
   )
 }
+

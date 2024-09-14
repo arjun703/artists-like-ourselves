@@ -5,10 +5,12 @@ import toast from "react-hot-toast";
 import { pOSTRequest } from '@/app/_components/file_upload';
 import { useState } from 'react';
 import { Button } from '@mui/joy';
+import { useRouter } from 'next/navigation';
 
 export default function GoogleSignInButton() {
 
   const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
 
   const handleLoginSuccess = async (response) => {
     console.log('Login Success:', response);
@@ -33,6 +35,11 @@ export default function GoogleSignInButton() {
       }
     
       toast("Login successful, redirecting...")
+
+
+      window.location.href = '/feed';
+      
+    
 
     }catch(error){
 
@@ -60,6 +67,7 @@ export default function GoogleSignInButton() {
           <Button style={{minWidth: '250px'}} loading={true}>Logging in</Button>
         ): (
           <GoogleLogin
+            theme={'filled_blue'}
             onSuccess={handleLoginSuccess}
             onError={handleLoginFailure}
           />

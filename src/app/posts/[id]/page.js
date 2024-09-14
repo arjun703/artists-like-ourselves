@@ -1,7 +1,10 @@
 'use client'
 import Container from '@mui/material/Container';
 import { useState, useEffect } from 'react';
-
+import Post from '@/app/_components/post';
+import toast from 'react-hot-toast';
+import LoadingPost from '@/app/_components/_loading-post';
+import Alert from '@mui/material/Alert';
 
 export default function ViewProfile({params}){
 
@@ -18,7 +21,7 @@ export default function ViewProfile({params}){
                 const data = await response.json();
                 setPost(data.post)
             } catch (error) {
-                alert( error.message)
+                toast( error.message)
             }finally{
                 setIsLoading(false)
             }
@@ -28,39 +31,18 @@ export default function ViewProfile({params}){
 
     }, []); 
 
-    if(isLoading){
+    if(!isLoading && !post){
         return(
-            <>
-                <h1 style={{textAlign:'center', marginTop:'50px'}}>
-                    Loading
-                </h1>
-            </>
+            <Alert severity="error">An error occured while fetching post.</Alert>
         )
     }
 
-    if(!isLoading && post){
-        return (
-            <Container sx={{marginTop: '30px'}} maxWidth="sm">
-                <DisplayPost post={post} /> 
-            </Container>
-        );
-    }
-
     return(
-        <>
-            <h3 style={{textAlign:'center', marginTop:'50px'}}>
-                Something went wrong.
-            </h3>
-        </>
+        <Container maxWidth={'sm'}>
+            <div style={{marginTop: '30px'}}>
+                { isLoading ? <LoadingPost /> : <Post post={post} /> }
+            </div>
+        </Container>
     )
-}
-
-import Post from '@/app/_components/post';
-
-function DisplayPost({post}){
-    return(
-        <div>
-            <Post post={post} />
-        </div>
-    )
+    
 }

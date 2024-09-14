@@ -10,11 +10,18 @@ export  async function GET(request) {
 
     const feedTypeFilter = url.searchParams.get("feedTypeFilter")
 
+    const ofUser = url.searchParams.get("of_user")
+
     try {
 
+        let allFilters = [];
+
+        let allFiltersString = '';
+
         let mediaTypeFilters = [];
-        let mediaTypeFiltersString = '';
+        
         let splittedFeedTypeFilters = [];
+
         if(feedTypeFilter !== null){
             splittedFeedTypeFilters = feedTypeFilter.split('||')
         }
@@ -30,7 +37,15 @@ export  async function GET(request) {
         }
         
         if(mediaTypeFilters.length){
-            mediaTypeFiltersString = ' WHERE ' + mediaTypeFilters.join(' OR ') 
+            allFilters.push( '(' + mediaTypeFilters.join(' OR ') + ')' ) 
+        }
+
+        if(ofUser && ofUser !== undefined){
+            allFilters.push(` ( p.username = '${ofUser}' )`)
+        }
+
+        if(allFilters.length){
+            allFiltersString = ' WHERE ' + allFilters.join(' AND ')
         }
 
         // Save the title and filenames in the MySQL database
@@ -38,7 +53,9 @@ export  async function GET(request) {
             SELECT 
                 p.id AS post_id,
                 p.username,
-                p.posted_at,
+                umi.name,
+                umi.profile_pic_src,
+                TIMESTAMPDIFF(SECOND, p.posted_at, NOW())  AS posted_ago_in_seconds,
                 p.caption,
                 pm.media_src,
                 pm.media_type
@@ -46,11 +63,15 @@ export  async function GET(request) {
                 posts p
             LEFT JOIN 
                 posts_media pm ON p.id = pm.post_id
+            INNER JOIN
+                user_more_info umi  ON umi.username =  p.username 
 
-            ${mediaTypeFiltersString}
+            ${allFiltersString}
             
             ORDER BY 
-                p.posted_at DESC;
+                p.posted_at DESC
+
+            LIMIT 10
         `;
 
         connection = await databaseConnection();

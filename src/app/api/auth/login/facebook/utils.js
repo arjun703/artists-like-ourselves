@@ -41,10 +41,10 @@ export  async function getUserInfo(inputToken) {
     try {
         const response = await fetch(`https://graph.facebook.com/me?access_token=${inputToken}&fields=id,name,email`);
         const userInfo = await response.json();
-        console.log('User Info:', userInfo);
         return userInfo;
     } catch (error) {
         console.error('Error fetching user info:', error);
-        throw error;
+
+        throw new Error(error.message)
     }
 }

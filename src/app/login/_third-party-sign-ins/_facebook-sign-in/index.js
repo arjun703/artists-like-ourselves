@@ -4,10 +4,12 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import { Button } from '@mui/joy';
 import toast from 'react-hot-toast';
 import { pOSTRequest } from '@/app/_components/file_upload';
+import { useRouter } from 'next/navigation';
 
 const FacebookSignIn = () => {
+  const router = useRouter()
 
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
   const  handleLoginSuccess   = async (token) => {
 
@@ -28,6 +30,11 @@ const FacebookSignIn = () => {
       }
     
       toast("Login successful, redirecting...")
+
+      window.location.href = '/feed';
+      
+    
+
 
     }catch(error){
 
@@ -55,8 +62,7 @@ const FacebookSignIn = () => {
 
 
   useEffect(() => {
-
-
+    
     (function(d, s, id){
       var js, fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) {return;}
@@ -75,15 +81,13 @@ const FacebookSignIn = () => {
         version    : 'v20.0'           // Use this Graph API version for this call.
       });
 
-      setIsLoading(false)
-
     };  
 
   }, [])
 
 
   return(
-    <Button loading={isLoading} style={{minWidth: '250px'}} onClick={openFacebookPopup} startDecorator={<FacebookIcon />}>Sign in with Facebook</Button>
+    <Button  loading={isLoading} style={{minWidth: '250px'}} onClick={openFacebookPopup} startDecorator={<FacebookIcon />}>Sign in with Facebook</Button>
   )
 
 };

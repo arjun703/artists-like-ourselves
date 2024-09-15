@@ -14,6 +14,8 @@ import toast from 'react-hot-toast';
 
 import uploadToS3 from '../_upload-to-s3';
 
+import ProgressBar from '../_progress-bar';
+
 const PostUploadForm = ({ onClose }) => {
   
   const [caption, setCaption] = useState('')
@@ -21,49 +23,72 @@ const PostUploadForm = ({ onClose }) => {
   const [fileName, setFileName] = useState('')
   const [isUploadSuccess, setIsUploadSuccess] = useState(false)
   const [post_id, setPostID] = useState('')
-  const handleConfirm = () => {
-    // Logic to handle confirmation of the new profile image (newProfileImage)
-    onClose();
-  };
+
+  const [isFileUploading, setFileUploading] = useState(false)
+
+  const [fileUploadProgressValue, setFileUploadProgressValue] = useState(0)
 
   const [isUploading, setIsUploading] = useState(false)
 
-  const handlePostUpload = async () => {
+  const handlePostUpload =  () => {
 
     if(!(!media && caption.trim().length == 0)){
       
-      try{
-
-        setIsUploading(true)
-        
-        let file_url_after_upload = ''
-        let media_type = ''
         if(media !== false){
-          media_type = media.type
-          const fileUploadToS3ResponseJSON = await uploadToS3(media)
-          file_url_after_upload = fileUploadToS3ResponseJSON.file_url_after_upload
-        }
-
-        const formData = new FormData();
-        formData.append('file_url_after_upload', file_url_after_upload);
-        formData.append('caption', caption);
-        formData.append('media_type', media_type);
-
-        const result = await pOSTRequest(formData, '/api/post/')
-        
-        if(result.success === true){
-          setPostID(result.post_id)
+          setIsUploading(true)
+          setFileUploading(true)
+          uploadToS3(media, fileUploadProgressHandler, fileUploadErrorHandler, fileUploadSuccessHandler)
         }else{
-          throw new Error(result.msg);
+          finalUpload()
         }
-
-      }catch(error){
-        toast(error.message)
-      }finally{
-        setIsUploading(false)
-      }
     }
   }
+
+  const fileUploadProgressHandler = (progressValue) => {
+    setFileUploadProgressValue(progressValue)
+  }
+
+  const fileUploadErrorHandler = (message) => {
+    setFileUploading(false)
+    setIsUploading(false)
+    toast(message)
+  }
+
+  const fileUploadSuccessHandler = (file_url_after_upload) => {
+    setFileUploading(false)
+    finalUpload(file_url_after_upload)
+  }
+
+  const finalUpload = async (file_url_after_upload = '') => {
+   
+    try{
+
+      setIsUploading(true)
+      
+      let media_type = ''
+
+      if(media !== false)
+        media_type = media.type
+
+      const formData = new FormData();
+      formData.append('file_url_after_upload', file_url_after_upload);
+      formData.append('caption', caption);
+      formData.append('media_type', media_type);
+
+      const result = await pOSTRequest(formData, '/api/post/')
+
+      if(result.success === true){
+        setPostID(result.post_id)
+      }else{
+        throw new Error(result.msg);
+      }
+
+  }catch(error){
+    toast(error.message)
+  }finally{
+    setIsUploading(false)
+  }
+}
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -113,6 +138,7 @@ const PostUploadForm = ({ onClose }) => {
 
   return (
     <Modal
+      sx={{opacity: 1}}
       open={true} // You need to manage the open state in your parent component
       onClose={()=>{}}
       aria-labelledby="modal-modal-title"
@@ -123,6 +149,7 @@ const PostUploadForm = ({ onClose }) => {
           position: 'absolute',
           top: '50%',
           left: '50%',
+          opacity: 1,
           transform: 'translate(-50%, -50%)',
           width: '90%',
           maxWidth: 500,
@@ -146,7 +173,7 @@ const PostUploadForm = ({ onClose }) => {
             placeholder='Express your positive art..'
             onInput={(e) => handleTextAreaInput(e)}
             defaultValue={caption}
-            disabled={isUploading}
+            disabled={isUploading  }
             autoFocus={true}
             rows="2"
             style={{
@@ -235,16 +262,28 @@ const PostUploadForm = ({ onClose }) => {
 
         }
         <Divider></Divider>
-        <Button
-          variant="solid"
-          loading={isUploading}
-          onClick={handlePostUpload}
-          component="label"
-          disabled={!media && !caption.length}
-          sx={{ marginTop: '20px', minWidth: '250px'  }}
-        >
-          Post
-        </Button>
+
+        {
+          isFileUploading ? (
+            <div style={{marginTop: '25px'}}>
+              <ProgressBar progressValue={fileUploadProgressValue} />
+            </div>
+          ): (
+            <Button
+              variant="solid"
+              loading={isUploading}
+              onClick={handlePostUpload}
+              component="label"
+              disabled={!media && !caption.length}
+              sx={{ marginTop: '20px', minWidth: '250px'  }}
+            >
+              Post
+            </Button>
+          )
+        }
+
+
+
       </Box>
     </Modal>
   );

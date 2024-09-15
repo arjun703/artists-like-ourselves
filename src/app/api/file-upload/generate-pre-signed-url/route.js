@@ -18,8 +18,6 @@ export  async function POST(request) {
 
         const {token_exists, username} = getLoggedInUsername()
 
-        const loggedInUsername = username
-
         if(!token_exists){throw new Error("User not logged in")}
         
         const data = await request.formData()
@@ -35,9 +33,6 @@ export  async function POST(request) {
         }
 
         const pre_signed_URL = await createPresignedUrlWithClient(file_name); 
-
-        console.log("pre_signed_URL")
-        console.log(pre_signed_URL)
 
         const file_url_after_upload = `https://s3.amazonaws.com/${process.env.S3_BUCKET_NAME}/${file_name}`;
 

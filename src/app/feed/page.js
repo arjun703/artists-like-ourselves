@@ -14,42 +14,37 @@ import PostUploadFormInitiator from "./post_upload_form_initiator";
 
 export default function Feed(){
 
-  const { searchParams } = new URL(window.location.href)
-
-  const filters = searchParams.get('filter')
-
   const [postUploadFormOpen, setPostUploadFormOpen] = useState(false)
     
   const handlePostUploadFormDisplay = () => {setPostUploadFormOpen(!postUploadFormOpen)}
 
   const [posts, setPosts] = useState([])
 
+  const [loading, setLoading] = useState(true)
+  
+  const { searchParams } = new URL(window?.location?.href);
+
+  const filters = searchParams?.get('filter');
 
   const [feedTypeFilter, setFeedTypeFilter] = useState(filters?.split(',') || []) 
 
-  const [loading, setLoading] = useState(true)
-  
   useEffect(() => {
 
       async function fetchDashboard() {
     
         try {
-    
+
             setLoading(true)
 
               let apiURL = '/api/feed/';
               
               let filters = [];
-              
-              if(feedTypeFilter.length){ 
-                history.replaceState({}, '', '/feed?filter='+feedTypeFilter.join(',') ) 
 
+              if(feedTypeFilter.length){           
                 filters.push('feedTypeFilter='+feedTypeFilter.join('||'))
-              }else{
-                history.replaceState({}, '', '/feed/')
               }
-
-
+              console.log("updating site url from fetchDashboard")
+              updateSiteURL()
 
               let queryParams = filters.join('&') 
               
@@ -72,10 +67,18 @@ export default function Feed(){
 
   }, [feedTypeFilter]); 
 
+
+  const updateSiteURL = () => {
+    if(feedTypeFilter.length){ 
+      history.replaceState({}, '', '/feed?filter='+feedTypeFilter.join(',') ) 
+    }else{
+      history.replaceState({}, '', '/feed/')
+    }
+  }
+
   const handleFeedTypeFilterChange = (filterBy) => {
     if(!(feedTypeFilter.includes(filterBy))){
       setFeedTypeFilter([...feedTypeFilter, filterBy])
-      console.log(feedTypeFilter)
     }
   }
 

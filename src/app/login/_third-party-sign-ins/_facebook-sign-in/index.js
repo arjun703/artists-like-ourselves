@@ -31,8 +31,7 @@ const FacebookSignIn = () => {
     
       toast("Login successful, redirecting...")
 
-      window.location.href = '/feed';
-      
+s      
     
 
 

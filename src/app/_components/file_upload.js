@@ -1,15 +1,11 @@
 export  async function pOSTRequest(formData, endPoint){
-    const token = localStorage.getItem('token')
     try {
         const response = await fetch(endPoint, {
           method: 'POST',
-          headers: {
-            'Authorization': `${token}`
-            },
           body: formData,
         });
 
-        const responseJson = response.json()
+        const responseJson =  await response.json()
 
         if (response.ok) {
             return responseJson
@@ -24,13 +20,9 @@ export  async function pOSTRequest(formData, endPoint){
 }
 
 export  async function uPDATErequest(formData, endPoint){
-    const token = localStorage.getItem('token')
     try {
         const response = await fetch(endPoint, {
           method: 'PUT',
-          headers: {
-            'Authorization': `${token}`
-            },
           body: formData,
         });
 

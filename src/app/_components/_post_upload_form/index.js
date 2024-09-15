@@ -12,6 +12,8 @@ import {pOSTRequest, dELETErequest} from '@/app/_components/file_upload';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import toast from 'react-hot-toast';
 
+import uploadToS3 from '../_upload-to-s3';
+
 const PostUploadForm = ({ onClose }) => {
   
   const [caption, setCaption] = useState('')
@@ -27,18 +29,34 @@ const PostUploadForm = ({ onClose }) => {
   const [isUploading, setIsUploading] = useState(false)
 
   const handlePostUpload = async () => {
+
     if(!(!media && caption.trim().length == 0)){
+      
       try{
+
         setIsUploading(true)
+        
+        let file_url_after_upload = ''
+        let media_type = ''
+        if(media !== false){
+          media_type = media.type
+          const fileUploadToS3ResponseJSON = await uploadToS3(media)
+          file_url_after_upload = fileUploadToS3ResponseJSON.file_url_after_upload
+        }
+
         const formData = new FormData();
-        formData.append('media', media);
+        formData.append('file_url_after_upload', file_url_after_upload);
         formData.append('caption', caption);
+        formData.append('media_type', media_type);
+
         const result = await pOSTRequest(formData, '/api/post/')
+        
         if(result.success === true){
           setPostID(result.post_id)
         }else{
           throw new Error(result.msg);
         }
+
       }catch(error){
         toast(error.message)
       }finally{

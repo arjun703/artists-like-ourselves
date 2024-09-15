@@ -14,56 +14,16 @@ export  async function POST(request) {
         const loggedInUsername = username
 
         if(!token_exists){throw new Error("User not logged in")}
-        
+    
         const data = await request.formData()
 
         const caption = data.get('caption')
-        const media = data.get('media')
-        console.log(media)
-        if(!media && caption.trim().length == 0){
-            throw new Error('Error - At least caption or media is required.');
-        }
+        const file_url_after_upload = data.get('file_url_after_upload')
+        const media_type = data.get('media_type')
 
-        let media_src = ''
+        let media_src = file_url_after_upload
 
-        if(media && media.name){
-            const client = new S3Client({
-                region: process.env.S3_REGION,
-                credentials: {
-                  accessKeyId: process.env.S3_ACCESS_KEY_ID,
-                  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
-                }
-            })
-            let Key = ''
-            const mediaStream = Readable.from(media.stream());
-            const parts = media.name.split('.');
-            const mediaExt = parts.length > 1 ? parts.pop() : null;
-            if(mediaExt === null){
-                throw(new Error('Extension not found'))
-            }else{
-                Key = generateRandomString(20) + '.' + mediaExt
-            }
-
-            const params = {
-                Bucket: process.env.S3_BUCKET_NAME,
-                Key,
-                Body:mediaStream,
-                ContentType: media.type
-            };
-            
-            const upload = new Upload({
-                client: client,
-                params: params,
-              });
-            
-            const data = await upload.done();
-              
-            // Generate the URL in the desired format
-            media_src = `https://s3.amazonaws.com/${params.Bucket}/${params.Key}`;
-        
-        }
-
-        const post_id=generateRandomString(20)
+        const post_id = generateRandomString(20)
 
         // Save the title and filenames in the MySQL database
         let query = `INSERT INTO posts 
@@ -84,18 +44,18 @@ export  async function POST(request) {
                     INSERT INTO posts_media
                     (id, post_id, media_src, media_type) 
                     VALUES
-                    ('${generateRandomString()}', '${post_id}', '${media_src}','${media.type}')
+                    ('${generateRandomString()}', '${post_id}', '${media_src}','${media_type}')
                 `;
 
                 result = await executeQuery(connection, query);
                 
                 if(!result){
-                    throw new Error('Post created but error inserting post media.');
+                    throw new Error('Post created but error uploading post media');
                 }
             }
 
         }else{
-            throw new Error('Error inserting post.');
+            throw new Error('Error creating post');
         }
 
         return new Response(JSON.stringify({ success: true, post_id: post_id}), {

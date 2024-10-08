@@ -91,16 +91,73 @@ export  async function GET(request) {
     
     try {
 
-        let  query = `SELECT p.username, TIMESTAMPDIFF(SECOND, p.posted_at, NOW())  AS posted_ago_in_seconds, p.id, umi.name, p.caption, pm.media_src, media_type  from posts p
-            LEFT JOIN posts_media pm ON pm.post_id = p.id   
-            INNER JOIN user_more_info umi  ON umi.username =  p.username 
-           WHERE p.id  = '${postID}'
+        const {token_exists, username} = getLoggedInUsername()
+
+        const query = `
+            SELECT 
+                p.id AS id,
+                p.username AS posted_by_username,
+                umi.name as posted_by_name,
+                umi.profile_pic_src as poster_profile_pic,
+                TIMESTAMPDIFF(SECOND, p.posted_at, NOW())  AS posted_ago_in_seconds,
+                p.caption,
+                pm.media_src,
+                pm.media_type,
+                ${
+                    token_exists ? `
+                        CASE 
+                            WHEN pl.id IS NOT NULL THEN TRUE
+                            ELSE FALSE
+                        END AS has_already_liked,
+                    ` : `
+                    
+                        false AS has_already_liked,
+                    `
+                }
+
+                ${
+                    token_exists ? `
+                        CASE 
+                            WHEN p.username = '${username}' THEN TRUE
+                            ELSE FALSE
+                        END AS is_editable
+
+                    `: `
+                        false AS is_editable
+                    `
+                }
+
+            FROM 
+                posts p
+
+            LEFT JOIN 
+                posts_media pm ON p.id = pm.post_id
+            
+            ${
+                token_exists ? `
+                    LEFT JOIN
+                    post_likes pl ON pl.post_id = p.id AND pl.username='${username}'
+                ` : ''
+            }
+
+            INNER JOIN
+                user_more_info umi  ON umi.username =  p.username 
+
+            WHERE p.id = '${postID}'
+            
+            ORDER BY 
+                p.posted_at DESC
+
+            LIMIT 10
+        
         `;
 
-        connection = await databaseConnection();    
 
-        const posts = await  executeQuery(connection, query)
-        let post = {};
+        connection = await databaseConnection();
+
+        let posts  = await executeQuery(connection, query);
+
+        let post  = {}
 
         if(posts.length){
             post = posts[0]
@@ -108,7 +165,19 @@ export  async function GET(request) {
             throw new Error('Post not found.');
         }
 
-        return new Response(JSON.stringify({ success: true, post}), {
+        const post_id = post.id
+
+        let query2 = `SELECT  COUNT(post_id) AS likes_count, post_id  FROM post_likes WHERE post_id ='${post_id}' GROUP BY post_id `;
+
+        const post_id_vs_likes = {}
+
+        const posts_num_likes_response = await executeQuery(connection, query2);
+
+        posts_num_likes_response.forEach(p => post_id_vs_likes[p.post_id] = p.likes_count )
+
+        posts = posts.map(p => ({...p, num_likes: post_id_vs_likes[p.id] !== undefined ? post_id_vs_likes[p.id] : 0 }) )
+
+        return new Response(JSON.stringify({ query2, posts_num_likes_response, success: true, post: posts[0]}), {
             headers: {
                 "Content-Type": "application/json"
             },

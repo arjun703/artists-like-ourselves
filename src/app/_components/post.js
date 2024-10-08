@@ -16,20 +16,55 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useState, useEffect, useRef } from 'react';
 import calculatePostedAgo from './posted-ago';
 import Link from 'next/link';
+import { pOSTRequest, dELETErequest } from './file_upload';
+import toast from 'react-hot-toast';
+import { Button } from '@mui/joy';
+import { Divider } from '@mui/material';
+import ShareButton from './modals/share-posts';
+
 
 export default function Post({post}) {
    
-  const [isLiked, setIsLiked] = useState(false)
+  const [isLiked, setIsLiked] = useState(post.has_already_liked)
   var [p, setP] = useState(post);
+  const [isLikingOrUnliking, setIsLikingOrUnliking] = useState(false)
+  const [numLikes, setNumLikes] = useState(post.num_likes)
+
+  const handleLikeUnlike = async () =>{
+    const prevState  = isLiked
+    const prevNumLikes = numLikes
+    try{
+      setIsLikingOrUnliking(true)
+      setIsLiked(!prevState)
+      const formData = new FormData()
+      formData.append('post_id', post.id) 
+      if(prevState == false){
+        setNumLikes(numLikes+1)
+        const responseJSON =  await pOSTRequest(formData, '/api/like')
+        if(responseJSON.success !== true) throw new Error(responseJSON.msg)
+      }else{
+        setNumLikes(numLikes-1)
+        const responseJSON =  await dELETErequest(formData, '/api/like')
+        if(responseJSON.success !== true) throw new Error(responseJSON.msg)
+      }
+    }catch(error){
+      toast(error.message) 
+      setIsLiked(prevState)
+      setNumLikes(numLikes)
+    }finally{
+      setIsLikingOrUnliking(false)
+    }
+  }  
+
 
   return (
     <Card id={p.id} sx={{ maxWidth: '100%', borderRadius: '10px', marginBottom: '20px' }}>
       <CardHeader
         avatar={
-          <Link href={'/users/'+p.username} style={{textDecoration:'none'}}>
+          <Link href={'/users/'+p.posted_by_username} style={{textDecoration:'none'}}>
             <Avatar src={p.profile_pic_src} aria-label="recipe">
               {
-                p.name.split(' ').map(a => a[0]).join('')
+                p.posted_by_name.split(' ').map(a => a[0]).join('')
               }
             </Avatar>
           </Link>
@@ -39,19 +74,24 @@ export default function Post({post}) {
             <MoreVertIcon />
           </IconButton>
         }
-        title={<Link style={{textDecoration:'none'}} href={'/users/'+p.username}> {p.name}</Link>}
+        title={<Link style={{textDecoration:'none'}} href={'/users/'+p.posted_by_username}> {p.posted_by_name}</Link>}
         subheader={calculatePostedAgo(p.posted_ago_in_seconds)}
       />
       <DisplayCardContent caption={p.caption} />
       <DisplayCardMedia p={p} />
-
-      <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-            <FavoriteIcon onClick={()=> setIsLiked(!isLiked)} style={{ fill: isLiked ? 'red' : '' }} />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
+        <Divider />
+      <CardActions >
+        <Button 
+          color={isLiked ? 'success': 'neutral'} 
+          variant={isLiked ? 'solid': 'outlined'} 
+          startDecorator={<FavoriteIcon />}
+          sx={{opacity: '1!important'}}  
+          onClick={isLikingOrUnliking ? () => {} :  handleLikeUnlike}
+          fullWidth
+        >
+          {numLikes > 0 ? numLikes: ''}
+        </Button>
+        <ShareButton postID={p.id} />
       </CardActions>
     </Card>
   );

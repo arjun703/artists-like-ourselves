@@ -4,6 +4,55 @@ export  async function GET(request) {
 
     const connection = await databaseConnection();
 
+
+    let queries = [
+        `
+            CREATE table profile_views ( 
+                id INT PRIMARY KEY auto_increment, 
+                viewer VARCHAR(255) NOT NULL,
+                viewee VARCHAR(255) NOT NULL,
+                foreign key (viewer) references users(username),
+                foreign key (viewee) references users(username),
+                UNIQUE (viewer, viewee)
+            )
+        `,
+`
+
+CREATE TABLE followers ( 
+    id INT PRIMARY KEY AUTO_INCREMENT, 
+    username VARCHAR(255) NOT NULL,
+    follower VARCHAR(255) NOT NULL,
+    FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE,
+    FOREIGN KEY (follower) REFERENCES users(username) ON DELETE CASCADE,
+    UNIQUE(username, follower)
+);
+
+`,
+
+`
+
+CREATE table post_likes ( 
+	id INT PRIMARY KEY auto_increment, 
+	post_id VARCHAR(255) NOT NULL,
+    username  VARCHAR(255) NOT NULL,
+    foreign key (post_id) references posts(id) on delete cascade,
+    foreign key (username) references users(username) on delete cascade,
+    unique(post_id, username)
+)
+`,
+
+`
+CREATE table post_views ( 
+	id INT PRIMARY KEY auto_increment, 
+	post_id VARCHAR(255) NOT NULL,
+    username  VARCHAR(255) NOT NULL,
+    foreign key (post_id) references posts(id) on delete cascade,
+    foreign key (username) references users(username) on delete cascade,
+	UNIQUE (post_id, username)
+)
+`
+    ]
+
     // Save the title and filenames in the MySQL database
     let query = `
         CREATE TABLE IF NOT EXISTS users(
@@ -15,6 +64,7 @@ export  async function GET(request) {
             PRIMARY KEY(username)
         )
     `;
+
     let result = await executeQuery(connection, query)
     console.log(result)
 
@@ -28,6 +78,7 @@ export  async function GET(request) {
             FOREIGN KEY (username) REFERENCES users(username)
         )
     `;
+
     result = await executeQuery(connection, query)
     console.log(result)
 

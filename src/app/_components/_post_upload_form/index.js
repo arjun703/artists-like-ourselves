@@ -282,9 +282,6 @@ const PostUploadForm = ({ onClose }) => {
           )
         }
 
-
-
-
       </Box>
     </Modal>
   );

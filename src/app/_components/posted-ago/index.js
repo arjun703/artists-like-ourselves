@@ -16,7 +16,7 @@ export default function calculatePostedAgo(seconds) {
     for (const { unit, seconds: unitSeconds } of timeUnits) {
         const count = Math.floor(seconds / unitSeconds);
         if (count >= 1) {
-            return `${count}${unit} ago`;
+            return `${count}${unit}`;
         }
     }
 

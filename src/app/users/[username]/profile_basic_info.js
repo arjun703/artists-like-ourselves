@@ -210,6 +210,8 @@ function ProfileStats({data}){
           display: 'flex',
         }}
       >
+
+        
         <Stack 
           direction={'row'} 
           sx={{justifyContent:'center',alignItems:'center'}}

@@ -24,11 +24,7 @@ export default function Feed(){
 
   const [loading, setLoading] = useState(true)
   
-  const { searchParams } = new URL(window?.location?.href);
-
-  const filters = searchParams?.get('filter');
-
-  const [feedTypeFilter, setFeedTypeFilter] = useState(filters?.split(',') || []) 
+  const [feedTypeFilter, setFeedTypeFilter] = useState([]) 
 
   useEffect(() => {
 

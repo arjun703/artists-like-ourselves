@@ -220,7 +220,7 @@ function ProfileStats({data}){
                 stats.map((stat, index) => {
                     if(stat.link != ''){
                         return(
-                            <Typography onClick={()=>handleRedirect(stat.link)} variant="body1" sx={{ opacity: 0.8, cursor:'pointer',  }}>
+                            <Typography key={index} onClick={()=>handleRedirect(stat.link)} variant="body1" sx={{ opacity: 0.8, cursor:'pointer',  }}>
                                 {stat.value} {stat.label}{stat.value>1 ? 's':''}
                             </Typography>
                         )

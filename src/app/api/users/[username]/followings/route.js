@@ -16,6 +16,7 @@ export async function GET(request, {params}){
             )
         `
 
+        
         let followersResponse = await executeQuery(connection, query) 
 
         return new Response(JSON.stringify({  success: true, moreDataExists:false, followings: followersResponse  }), {

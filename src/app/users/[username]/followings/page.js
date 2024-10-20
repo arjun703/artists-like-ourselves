@@ -4,7 +4,10 @@ import { Avatar, Grid, Paper, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-export default function followingsList({params}){
+
+
+
+export default function FollowingsList({params}){
 
     const [isLoading, setIsLoading] = useState(true) 
     const [followings, setFollowings] = useState([])

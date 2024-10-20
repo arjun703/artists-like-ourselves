@@ -7,7 +7,7 @@ import { getNumPostViewsCount } from "../../utils/user/stats/post-views";
 import { getNumPostLikesCount } from "../../utils/user/stats/likes";
 
 
-export async function GET(){
+export async function GET(request){
     
     let connection = false
 
@@ -17,19 +17,7 @@ export async function GET(){
         
         const {token_exists, username} =  getLoggedInUsername()
 
-        if(token_exists !== true){
-            return new Response(JSON.stringify(
-                {
-                    success: true, 
-                    is_logged_in: false,
-                }), {
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                status: 200
-            });
-
-        }
+        if(token_exists !== true) throw new Error("Not logged in")
 
         let viewee = username;
 

@@ -1,5 +1,4 @@
-import mysql from 'mysql2';
-import {  getLoggedInUsername, databaseConnection, generateToken, executeQuery} from '@/app/api/utils'
+import {  getLoggedInUsername, databaseConnection, executeQuery} from '@/app/api/utils'
 import { logPostsView } from '../utils/log/post-views';
 
 export  async function GET(request) {

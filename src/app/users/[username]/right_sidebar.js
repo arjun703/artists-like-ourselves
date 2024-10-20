@@ -1,7 +1,9 @@
+import { Paper } from "@mui/material";
+
 export default function RightSidebar({username}){
     return(
-        <>
-            Right Sidebar
-        </>
+        <Paper sx={{padding:'20px'}}>
+            People you may know
+        </Paper>
     )
 }

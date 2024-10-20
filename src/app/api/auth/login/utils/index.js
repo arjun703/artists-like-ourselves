@@ -35,7 +35,7 @@ function setToken(user){
     return true
 }
 
-export  async function handleLogin(social_login_id, social_login_type, name) {
+export  async function handleLogin(social_login_id, social_login_type, name, picture) {
 
     let connection = false
 
@@ -49,6 +49,19 @@ export  async function handleLogin(social_login_id, social_login_type, name) {
 
         if(userInfo.user_exists === true){ // user has already registered
             
+            // let checkIfProfilePicExistsQuery = `SELECT profile_pic_src from user_more_info WHERE username='${userInfo.user.username}'`
+
+            // let profilePicSrcInfo = await executeQuery(connection, checkIfProfilePicExistsQuery)
+
+            // if(profilePicSrcInfo[0].profile_pic_src == null || profilePicSrcInfo[0].profile_pic_src == '' ){
+            //     let insertProfilePicQuery = `
+            //         UPDATE user_more_info 
+            //         SET profile_pic_src = '${picture}'
+            //         WHERE username = '${userInfo.user.username}'
+            //     ` 
+            //     await executeQuery(connection, insertProfilePicQuery)
+            // }
+
             setToken(userInfo.user)
 
         }else{
@@ -69,10 +82,9 @@ export  async function handleLogin(social_login_id, social_login_type, name) {
             if(userInfo.user_exists === true){ // user has already registered
                 
                 let createNewUserInfoQuery = `
-                    INSERT into user_more_info (username, name)
-                    VALUES('${username}', '${name}')
+                    INSERT into user_more_info (username, name, profile_pic_src)
+                    VALUES('${username}', '${name}', '${picture}')
                 `; 
-
 
                 await executeQuery(connection, createNewUserInfoQuery)
 

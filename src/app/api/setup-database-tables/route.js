@@ -7,15 +7,15 @@ export  async function GET(request) {
 
     let queries = [
         `
-            CREATE table profile_views ( 
-                id INT PRIMARY KEY auto_increment, 
-                viewer VARCHAR(255) NOT NULL,
-                viewee VARCHAR(255) NOT NULL,
-                foreign key (viewer) references users(username),
-                foreign key (viewee) references users(username),
-                UNIQUE (viewer, viewee)
-            )
-        `,
+CREATE table profile_views ( 
+	id INT PRIMARY KEY auto_increment, 
+	viewer VARCHAR(255) NOT NULL,
+	viewee VARCHAR(255) NOT NULL,
+	viewed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	foreign key (viewer) references users(username) ON DELETE CASCADE,
+	foreign key (viewee) references users(username) ON DELETE CASCADE
+)
+`,
 `
 
 CREATE TABLE followers ( 
@@ -42,13 +42,29 @@ CREATE table post_likes (
 `,
 
 `
+
+CREATE table post_comments ( 
+	id INT PRIMARY KEY auto_increment, 
+	post_id VARCHAR(255) NOT NULL,
+    username  VARCHAR(255) NOT NULL,
+    cmt TEXT,
+    parent_id INT DEFAULT 0,
+    created_at timestamp DEFAULT current_timestamp,
+    foreign key (post_id) references posts(id) on delete cascade,
+    foreign key (username) references users(username) on delete cascade,
+    FOREIGN KEY (parent_id) REFERENCES post_comments(id) ON DELETE CASCADE -- self-referencing parent_id
+)
+`,
+
+
+`
 CREATE table post_views ( 
 	id INT PRIMARY KEY auto_increment, 
 	post_id VARCHAR(255) NOT NULL,
     username  VARCHAR(255) NOT NULL,
+	viewed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     foreign key (post_id) references posts(id) on delete cascade,
-    foreign key (username) references users(username) on delete cascade,
-	UNIQUE (post_id, username)
+    foreign key (username) references users(username) on delete cascade
 )
 `
     ]

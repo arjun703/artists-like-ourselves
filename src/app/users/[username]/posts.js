@@ -19,12 +19,12 @@ export default function UserPosts({username}){
             
             setIsLoading(true)
   
-                let apiURL = '/api/feed/';
+                let apiURL = `/api/users/${username}` ;
                 
                 let queryParams = [];
                 
                 queryParams.push('of_user=' + username)
-
+                
                 if(feedTypeFilter !== '' ){
                     queryParams.push('feedTypeFilter=' + feedTypeFilter)
                 }                  

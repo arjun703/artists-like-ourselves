@@ -65,14 +65,10 @@ export  async function dELETErequest(formData, endPoint){
 }
 
 export  async function getRequest(endPoint){
-    const token = 'abc';
-    console.log(endPoint, 'endpoint')
+
     try {
         const response = await fetch(endPoint, {
             method: 'GET',
-            headers: {
-                'Authorization': `${token}`
-            }
         });
 
         const responseJson = response.json()
@@ -80,10 +76,10 @@ export  async function getRequest(endPoint){
         if (response.ok) {
             return responseJson
         } else {
-            throw new Error('Error retrieving info')
+            throw new Error('Response not OK')
         }
 
     } catch (error) {
-        throw new Error('Error retrieving info - ' +error)
+        throw new Error(error.message)
     }
 }

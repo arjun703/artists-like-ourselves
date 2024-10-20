@@ -16,12 +16,14 @@ export  async function POST(request) {
         });
         
         // Get the user information from the payload
-        const {sub, name} = ticket.getPayload(); // sub is id of that user in google platform
+        const {sub, name, picture} = ticket.getPayload(); // sub is id of that user in google platform
 
-        const loggedIn = await handleLogin(sub, 'google', name)
+        const loggedIn = await handleLogin(sub, 'google', name, picture)
         
         if(loggedIn === true){
             
+
+
             return new Response(JSON.stringify({ success: true }), {
                 headers: {
                     "Content-Type": "application/json"

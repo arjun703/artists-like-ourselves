@@ -14,7 +14,7 @@ export default function ViewProfile({params}){
     useEffect(() => {
         async function fetchPost() {
             try {
-                const response = await fetch('/api/post?id='+params.id); // Adjust the API endpoint URL as needed
+                const response = await fetch(`/api/post/${params.id}`); // Adjust the API endpoint URL as needed
                 if (!response.ok) {
                     throw new Error('Failed to fetch videos');
                 }
@@ -33,7 +33,7 @@ export default function ViewProfile({params}){
 
     if(!isLoading && !post){
         return(
-            <Alert severity="error">An error occured while fetching post.</Alert>
+            <Alert severity="error">This post no longer exists.</Alert>
         )
     }
 

@@ -11,6 +11,8 @@ import smoothScrollToTop from './smooth_scroll_to_top';
 import toast from 'react-hot-toast';
 import PostUploadForm from "../_components/_post_upload_form";
 import PostUploadFormInitiator from "./post_upload_form_initiator";
+import { getRequest } from "../_components/file_upload";
+import FeedLeftSidebarSkeleton from "./_left_side_bar/skeleton";
 
 export default function Feed(){
 
@@ -65,6 +67,8 @@ export default function Feed(){
       
       fetchDashboard();
 
+
+
   }, [feedTypeFilter]); 
 
 
@@ -86,12 +90,34 @@ export default function Feed(){
     setFeedTypeFilter(feedTypeFilter.filter((item) => item !== filterby));
   }
 
+
+  const [fetchingStats, setFetchingStats]= useState(true)
+  const [profileStats, setProfileStats] = useState({})
+
+  useEffect(()=> {
+    async function fetchStats(){
+      try{
+        const userInfoJSON = await getRequest('/api/feed/left-sidebar')
+        if(userInfoJSON.success !== true) throw new Error(userInfoJSON.msg)
+          setProfileStats(userInfoJSON)
+      }catch(error){
+          toast(error.message)
+      }finally{
+        setFetchingStats(false)
+      }
+    }
+    fetchStats();
+  }, [])
+
+
   return(
     <>
       <Container maxWidth="lg">
         <Grid container spacing={4} sx={{marginTop: '1px'}}>
           <Grid item xs={12} md={3}>
-            <LeftSideBar />
+            {
+              fetchingStats  ? <FeedLeftSidebarSkeleton /> :  <LeftSideBar profileStats={profileStats} />
+            }
           </Grid>
           <Grid item xs={12} md={6}>
 
@@ -104,16 +130,14 @@ export default function Feed(){
                 : 
                   <></>
             }
+              <Paper sx={{paddingTop: {md: '20px', xs: '20px'}, paddingBottom: '20px', paddingLeft: '20px', paddingRight:'20px' }}>
+                <PostUploadFormInitiator data={profileStats} handlePostUploadFormDisplay={handlePostUploadFormDisplay} />
+              </Paper>
+              <Divider sx={{marginBottom: '20px'}} />
             {
               loading 
                 ? <LoadingPosts />
-                : <>
-                  <Paper sx={{paddingTop: {md: '20px', xs: '20px'}, paddingBottom: '20px', paddingLeft: '20px', paddingRight:'20px' }}>
-                      <PostUploadFormInitiator handlePostUploadFormDisplay={handlePostUploadFormDisplay} />
-                  </Paper>
-                  <Divider style={{margin: '10px', opacity: 0}}></Divider>
-                  <FeedPosts posts={posts}  />
-                </>
+                : <FeedPosts posts={posts}  /> 
             }
           </Grid>
           <Grid item xs={12} md={3}>

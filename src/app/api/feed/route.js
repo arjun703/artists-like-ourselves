@@ -1,6 +1,6 @@
 import mysql from 'mysql2';
 import {  getLoggedInUsername, databaseConnection, generateToken, executeQuery} from '@/app/api/utils'
-import { Mediation } from '@mui/icons-material';
+import { logPostsView } from '../utils/log/post-views';
 
 export  async function GET(request) {
 
@@ -69,7 +69,6 @@ export  async function GET(request) {
                             ELSE FALSE
                         END AS has_already_liked,
                     ` : `
-                    
                         false AS has_already_liked,
                     `
                 }
@@ -108,24 +107,36 @@ export  async function GET(request) {
                 p.posted_at DESC
 
             LIMIT 10
-        
+            
         `;
 
         connection = await databaseConnection();
-
+        
         let posts  = await executeQuery(connection, query);
-
+        
         const post_ids = posts.map(post => `'${post.id}'`).join(',')
-
+        
+        logPostsView(posts.map(post => post.id), connection)
+        
         let query2 = `SELECT  COUNT(post_id) AS likes_count, post_id  FROM post_likes WHERE post_id IN ( ${post_ids}) GROUP BY post_id `;
-
+        
         const post_id_vs_likes = {}
-
+        
         const posts_num_likes_response = await executeQuery(connection, query2);
-
+        
         posts_num_likes_response.forEach(p => post_id_vs_likes[p.post_id] = p.likes_count )
-
+        
         posts = posts.map(p => ({...p, num_likes: post_id_vs_likes[p.id] !== undefined ? post_id_vs_likes[p.id] : 0 }) )
+        
+        let query3 = `SELECT  COUNT(post_id) AS comments_count, post_id  FROM post_comments WHERE post_id IN ( ${post_ids}) GROUP BY post_id `;
+
+        const post_id_vs_comments = {}
+        
+        const posts_num_comments_response = await executeQuery(connection, query3);
+        
+        posts_num_comments_response.forEach(p => post_id_vs_comments[p.post_id] = p.comments_count )
+        
+        posts = posts.map(p => ({...p, num_comments: post_id_vs_comments[p.id] !== undefined ? post_id_vs_comments[p.id] : 0 }) )
 
         return new Response(JSON.stringify({success: true, posts: posts, query: query }), {
             headers: {

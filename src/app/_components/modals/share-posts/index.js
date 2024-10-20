@@ -117,6 +117,7 @@ const ShareButton = ({postID}) => {
         fullWidth
         onClick={handleOpen}
         variant='outlined'
+        color={'neutral'} 
         startDecorator={<ShareIcon />}  
       >
         Share

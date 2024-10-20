@@ -1,13 +1,27 @@
+'use client'
+import { useState, useEffect } from 'react';
 import Card from '@mui/material/Card';
 import { CardActionArea } from '@mui/material';
 import CardMedia from '@mui/material/CardMedia';
 import ProfileStats from './profile_stats';
 import Divider from '@mui/material/Divider';
+import { useRouter } from 'next/navigation';
 
-export default function PPandCover(){
+export default function PPandCover({data}){
+    if(data.userInfo.cover_pic_src === null || data.userInfo.cover_pic_src == ''){
+        data.userInfo.cover_pic_src = '/site-assets/default_cover_pic.webp'
+    }
+
+    if(data.userInfo.profile_pic_src === null || data.userInfo.profile_pic_src == ''){
+        data.userInfo.profile_pic_src = '/site-assets/default_profile_pic.jpeg'
+    }
+
+    const router = useRouter()
+    const redirectToProfile = () => router.push(`/users/${data.userInfo.username}`)
+    
     return(
         <Card >
-            <CardActionArea sx={{paddingBottom: '10px'}}>
+            <CardActionArea onClick={redirectToProfile} sx={{paddingBottom: '10px'}}>
                 <div 
                     class="cover-pic__profile-pic"
                     style={{
@@ -16,7 +30,7 @@ export default function PPandCover(){
                     }}
                 >
                     <div className="cover-pic">
-                        <CardMedia component="img" height="140" image={'/site-assets/left_side_bar_cover_pic.jpg'}  />
+                        <CardMedia component="img" height="140" image={data.userInfo.cover_pic_src}  />
                     </div>
                     <div 
                         className="profile-pic"
@@ -38,7 +52,7 @@ export default function PPandCover(){
                                     border: '5px solid white',
                                     objectFit:'cover' 
                                 }} 
-                                src="/site-assets/left_side_bar_profile_pic.jpg" 
+                                src={data.userInfo.profile_pic_src}
                             />
                             <h4
                                 style={{
@@ -48,7 +62,7 @@ export default function PPandCover(){
                                     margin: '0' 
                                 }}
                             >
-                                Scott Beaver
+                                {data.userInfo.name}
                             </h4>
                         </div>
                     </div>
@@ -57,7 +71,7 @@ export default function PPandCover(){
 
             <Divider />
 
-            <ProfileStats />
+            <ProfileStats data={data} />
 
         </Card>
     )

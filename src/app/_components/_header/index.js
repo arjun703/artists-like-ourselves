@@ -4,6 +4,7 @@ import { Skeleton } from "@mui/material";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
+
 export default function Header() {
 
     const [isLoading, setIsLoading] = useState(true);
@@ -22,6 +23,8 @@ export default function Header() {
         }
     }, []);
 
+
+    
     const logOut = () => {
         document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
         location.reload();

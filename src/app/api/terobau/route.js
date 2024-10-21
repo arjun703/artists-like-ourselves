@@ -10,7 +10,7 @@ export  async function GET(request) {
         const {token_exists, username} = getLoggedInUsername()
 
        
-        return new Response(JSON.stringify({success: true, hello: "hello" }), {
+        return new Response(JSON.stringify({success: true, token: token_exists }), {
             headers: {
                 "Content-Type": "application/json"
             },

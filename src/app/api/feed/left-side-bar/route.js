@@ -15,9 +15,6 @@ export async function GET(request){
 
         const {token_exists, username} = getLoggedInUsername()
 
-  
-
-
         if(token_exists !== true){
             return new Response(JSON.stringify(
                 {
@@ -31,7 +28,9 @@ export async function GET(request){
             });
 
         }
+
         connection = await databaseConnection();
+
         let viewee = username;
 
         // retrieve profile_pic, cover_pic, num_followers, num_followings, profile_views, post_views

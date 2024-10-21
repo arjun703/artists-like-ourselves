@@ -1,11 +1,15 @@
-import {  getLoggedInUsername, databaseConnection} from '@/app/api/utils'
+import {  getLoggedInUsername } from '@/app/api/utils'
+
+export const dynamic =  'force-dynamic';
 
 export  async function GET(request) {
     try {
 
+        
+        
         const {token_exists, username} = getLoggedInUsername()
         
-        return new Response(JSON.stringify({ success: true, is_logged_in:true  }), {
+        return new Response(JSON.stringify({ success: true, from:"terobau" ,  is_logged_in:true  }), {
             headers: {
                 "Content-Type": "application/json"
             },

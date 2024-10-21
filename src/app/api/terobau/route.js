@@ -5,11 +5,7 @@ export  async function GET(request) {
 
     let connection = false
 
-    const url = new URL(request.url)
 
-    const feedTypeFilter = url.searchParams.get("feedTypeFilter")
-
-    const ofUser = url.searchParams.get("of_user")
 
     try {
 

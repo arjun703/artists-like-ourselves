@@ -34,6 +34,8 @@ export default function FollowersList({params}){
       const router = useRouter() 
 
       const redirectToProfile = (username) => router.push(`/users/${username}`)
+
+
       
     return(
         <Paper sx={{padding:'10px'}}>

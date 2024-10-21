@@ -5,6 +5,7 @@ export  async function GET(request) {
 
     let connection = false
 
+    const url = new URL(request.url)
 
 
     try {

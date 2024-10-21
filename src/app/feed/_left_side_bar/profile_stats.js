@@ -11,6 +11,7 @@ function ProfileStats({data}) {
     { label: 'Post Likes', value: data.postLikesCountInfo.post_likes_count, link: data.post_likes_stats_link },
   ];
 
+  
 
   return (
     <Box sx={{ mx: 'auto', p: 2, }}>

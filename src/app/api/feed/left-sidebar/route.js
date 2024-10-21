@@ -13,11 +13,12 @@ export async function GET(request){
 
     try{
 
-        connection = await databaseConnection();
         
         const {token_exists, username} =  getLoggedInUsername()
-
         if(token_exists !== true) throw new Error("Not logged in")
+
+        connection = await databaseConnection();
+
 
         let viewee = username;
 

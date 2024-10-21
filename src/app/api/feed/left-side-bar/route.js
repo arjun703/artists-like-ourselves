@@ -1,4 +1,4 @@
-import { databaseConnection } from "@/app/api/utils"
+import { databaseConnection, getLoggedInUsername } from "@/app/api/utils"
 import { basicInfo } from "@/app/api/utils/user/basic-info";
 import { getNumFollowers } from "@/app/api/utils/user/stats/followers";
 import { getNumFollowings } from "../../utils/user/stats/followings";
@@ -13,6 +13,8 @@ export async function GET(request){
 
     try{
 
+        const {token_exists, username} = getLoggedInUsername()
+
         return new Response(JSON.stringify(
             {
                 success: true, 
@@ -25,7 +27,6 @@ export async function GET(request){
         });
 
 
-        // const {token_exists, username} =  getLoggedInUsername()
         // if(token_exists !== true){
         //     return new Response(JSON.stringify(
         //         {

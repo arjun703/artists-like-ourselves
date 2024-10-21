@@ -100,7 +100,7 @@ export default function Feed(){
   useEffect(()=> {
     async function fetchStats(){
       try{
-        const userInfoJSON = await getRequest('/api/feed/left-sidebar')
+        const userInfoJSON = await getRequest('/api/feed/left-side-bar')
         if(userInfoJSON.success !== true) throw new Error(userInfoJSON.msg)
           setProfileStats(userInfoJSON)
       }catch(error){

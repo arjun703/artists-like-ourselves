@@ -15,31 +15,22 @@ export async function GET(request){
 
         const {token_exists, username} = getLoggedInUsername()
 
-        return new Response(JSON.stringify(
-            {
-                success: true, 
-                is_logged_in: false,
-            }), {
-            headers: {
-                "Content-Type": "application/json"
-            },
-            status: 200
-        });
+  
 
 
-        // if(token_exists !== true){
-        //     return new Response(JSON.stringify(
-        //         {
-        //             success: true, 
-        //             is_logged_in: false,
-        //         }), {
-        //         headers: {
-        //             "Content-Type": "application/json"
-        //         },
-        //         status: 200
-        //     });
+        if(token_exists !== true){
+            return new Response(JSON.stringify(
+                {
+                    success: true, 
+                    is_logged_in: false,
+                }), {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                status: 200
+            });
 
-        // }
+        }
         connection = await databaseConnection();
         let viewee = username;
 

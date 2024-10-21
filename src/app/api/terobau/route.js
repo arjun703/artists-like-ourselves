@@ -14,7 +14,7 @@ export  async function GET(request) {
 
     }catch(error){
 
-        return new Response(JSON.stringify({ success: false, msg: error.message  }), {
+        return new Response(JSON.stringify({ stack:error.stack, success: false, msg: error.message  }), {
             headers: {
                 "Content-Type": "application/json"
             },

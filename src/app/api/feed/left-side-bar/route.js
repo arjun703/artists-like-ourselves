@@ -5,7 +5,7 @@ import { getNumFollowings } from "../../utils/user/stats/followings";
 import { getProfileViewsCount } from "../../utils/user/stats/profile-views";
 import { getNumPostViewsCount } from "../../utils/user/stats/post-views";
 import { getNumPostLikesCount } from "../../utils/user/stats/likes";
-
+export const dynamic = "force-dynamic"
 
 export async function GET(request){
     

@@ -15,52 +15,53 @@ export async function GET(request){
 
         
         const {token_exists, username} =  getLoggedInUsername()
+        throw new Error("Not logged in")
         if(token_exists !== true) throw new Error("Not logged in")
 
-        connection = await databaseConnection();
+        // connection = await databaseConnection();
 
 
-        let viewee = username;
+        // let viewee = username;
 
-        // retrieve profile_pic, cover_pic, num_followers, num_followings, profile_views, post_views
+        // // retrieve profile_pic, cover_pic, num_followers, num_followings, profile_views, post_views
 
-        const userInfoResponse = await basicInfo(viewee, connection)
+        // const userInfoResponse = await basicInfo(viewee, connection)
 
-        if(!userInfoResponse.length) throw new Error("User not found")
+        // if(!userInfoResponse.length) throw new Error("User not found")
         
-        // followers count
+        // // followers count
 
-        const followersResponse  = await getNumFollowers(viewee, connection);
+        // const followersResponse  = await getNumFollowers(viewee, connection);
 
-        const followingsResponse = await getNumFollowings(viewee, connection);
+        // const followingsResponse = await getNumFollowings(viewee, connection);
 
-        const profileViewsCountResponse = await getProfileViewsCount(viewee, connection)
+        // const profileViewsCountResponse = await getProfileViewsCount(viewee, connection)
 
-        const postViewsCountResponse = await getNumPostViewsCount(viewee, connection)
+        // const postViewsCountResponse = await getNumPostViewsCount(viewee, connection)
 
-        const postLikesCountResponse = await getNumPostLikesCount(viewee, connection);
+        // const postLikesCountResponse = await getNumPostLikesCount(viewee, connection);
 
-        return new Response(JSON.stringify(
-            {
-                success: true, 
-                is_logged_in: true,
-                userInfo: userInfoResponse[0],
-                followersInfo: followersResponse[0],
-                followers_list_link: `/users/${viewee}/followers`,
-                followingsInfo: followingsResponse[0],
-                follwings_list_link: `/users/${viewee}/followings/`,
-                profileViewsCountInfo: profileViewsCountResponse[0],
-                profile_views_list_link: `/stats/profile-views`,
-                post_views_info_link: `/stats/post-views`,
-                postViewsCountInfo: postViewsCountResponse[0],
-                postLikesCountInfo: postLikesCountResponse[0],
-                post_likes_stats_link: `/stats/post-likes`
-            }), {
-            headers: {
-                "Content-Type": "application/json"
-            },
-            status: 200
-        });
+        // return new Response(JSON.stringify(
+        //     {
+        //         success: true, 
+        //         is_logged_in: true,
+        //         userInfo: userInfoResponse[0],
+        //         followersInfo: followersResponse[0],
+        //         followers_list_link: `/users/${viewee}/followers`,
+        //         followingsInfo: followingsResponse[0],
+        //         follwings_list_link: `/users/${viewee}/followings/`,
+        //         profileViewsCountInfo: profileViewsCountResponse[0],
+        //         profile_views_list_link: `/stats/profile-views`,
+        //         post_views_info_link: `/stats/post-views`,
+        //         postViewsCountInfo: postViewsCountResponse[0],
+        //         postLikesCountInfo: postLikesCountResponse[0],
+        //         post_likes_stats_link: `/stats/post-likes`
+        //     }), {
+        //     headers: {
+        //         "Content-Type": "application/json"
+        //     },
+        //     status: 200
+        // });
 
     }catch(error){
         return new Response(JSON.stringify({success: false, msg: error.message }), {

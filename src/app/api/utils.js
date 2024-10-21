@@ -80,7 +80,7 @@ export function getLoggedInUsername(){
   const token = cookieStore.get('token')
   
   if(token === '' || token === null || token === undefined || token.value === undefined){
-    return {token_exists: false}
+    return {token_exists: false, username: null}
   }
 
   const parts = token.value.split('.');

@@ -13,6 +13,7 @@ export default function PostUploadFormInitiator({handlePostUploadFormDisplay, da
         return <>Please Login to Upload posts</>
     }
 
+    
     return(
         <>
             <Grid container spacing={2} sx={{alignItems:'center'}}>

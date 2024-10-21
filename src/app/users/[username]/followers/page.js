@@ -3,6 +3,7 @@ import { getRequest } from "@/app/_components/file_upload";
 import { Avatar, Grid, Paper, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function FollowersList({params}){
 
@@ -26,12 +27,14 @@ export default function FollowersList({params}){
         }
 
 
-        
+
         fetchData()
       }, []);
     
+      const router = useRouter() 
 
-
+      const redirectToProfile = (username) => router.push(`/users/${username}`)
+      
     return(
         <Paper sx={{padding:'10px'}}>
             <Typography><h2>Followers of @{params.username}</h2></Typography>

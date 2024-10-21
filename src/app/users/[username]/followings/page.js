@@ -4,7 +4,7 @@ import { Avatar, Grid, Paper, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-
+import { useRouter } from "next/navigation";
 
 
 export default function FollowingsList({params}){
@@ -12,6 +12,7 @@ export default function FollowingsList({params}){
     const [isLoading, setIsLoading] = useState(true) 
     const [followings, setFollowings] = useState([])
 
+    
     useEffect( () => {
     
         async function fetchData(){
@@ -31,7 +32,9 @@ export default function FollowingsList({params}){
         fetchData()
       }, []);
     
+      const router = useRouter() 
 
+      const redirectToProfile = (username) => router.push(`/users/${username}`)
 
     return(
         <Paper sx={{padding:'10px'}}>

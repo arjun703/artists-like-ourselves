@@ -3,7 +3,7 @@ import FeedPosts from "./feed_posts"
 import RightSidebar from "./right_side_bar"
 import { Divider, Grid, Paper } from '@mui/material';
 import {Container} from '@mui/material';
-import LeftSideBar from './left_side_bar';
+import LeftSideBar from './_left_side_bar';
 import { useState, useEffect } from 'react';
 import DisplaySelectedFiltersChips from './_selected_filters';
 import LoadingPosts from './post_skeleton';
@@ -12,9 +12,14 @@ import toast from 'react-hot-toast';
 import PostUploadForm from "../_components/_post_upload_form";
 import PostUploadFormInitiator from "./post_upload_form_initiator";
 import { getRequest } from "../_components/file_upload";
-import FeedLeftSidebarSkeleton from "./left_side_bar/skeleton";
+import FeedLeftSidebarSkeleton from "./_left_side_bar/skeleton";
 
 
+
+
+
+
+// myaaaaaaaaaaaaaa
 
 export default function Feed(){
 

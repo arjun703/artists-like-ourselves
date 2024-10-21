@@ -1,4 +1,4 @@
-import { databaseConnection, getLoggedInUsername } from "@/app/api/utils"
+import { databaseConnection } from "@/app/api/utils"
 import { basicInfo } from "@/app/api/utils/user/basic-info";
 import { getNumFollowers } from "@/app/api/utils/user/stats/followers";
 import { getNumFollowings } from "../../utils/user/stats/followings";
@@ -13,20 +13,32 @@ export async function GET(request){
 
     try{
 
-        const {token_exists, username} =  getLoggedInUsername()
-        if(token_exists !== true){
-            return new Response(JSON.stringify(
-                {
-                    success: true, 
-                    is_logged_in: false,
-                }), {
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                status: 200
-            });
+        return new Response(JSON.stringify(
+            {
+                success: true, 
+                is_logged_in: false,
+            }), {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            status: 200
+        });
 
-        }
+
+        // const {token_exists, username} =  getLoggedInUsername()
+        // if(token_exists !== true){
+        //     return new Response(JSON.stringify(
+        //         {
+        //             success: true, 
+        //             is_logged_in: false,
+        //         }), {
+        //         headers: {
+        //             "Content-Type": "application/json"
+        //         },
+        //         status: 200
+        //     });
+
+        // }
         connection = await databaseConnection();
         let viewee = username;
 

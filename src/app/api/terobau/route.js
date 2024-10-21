@@ -1,11 +1,10 @@
 import {  getLoggedInUsername, databaseConnection, executeQuery} from '@/app/api/utils'
 import { logPostsView } from '../utils/log/post-views';
 
-export  async function GET(request) {
+export  async function GET() {
 
     let connection = false
 
-    const url = new URL(request.url)
 
 
     try {

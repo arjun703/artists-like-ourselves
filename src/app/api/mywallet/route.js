@@ -1,6 +1,6 @@
 import { databaseConnection, executeQuery, getLoggedInUsername } from "../utils";
 
-export async function GET(request){
+export async function GET(){
     let connection = false
     try{
 

@@ -1,27 +1,38 @@
-import {  getLoggedInUsername, databaseConnection} from '@/app/api/utils'
+import {  getLoggedInUsername, databaseConnection, executeQuery} from '@/app/api/utils'
+import { logPostsView } from '../utils/log/post-views';
 
-export  async function GET(request) {
+export  async function GET() {
+
+    let connection = false
+
+
+
     try {
 
+    
+        // find whether the logged in user has already liked the post
         const {token_exists, username} = getLoggedInUsername()
-        
-        return new Response(JSON.stringify({ success: true, is_logged_in:true  }), {
+
+   
+        return new Response(JSON.stringify({success: true, token_exists, username }), {
             headers: {
                 "Content-Type": "application/json"
             },
             status: 200
         });
 
-    }catch(error){
+    } catch (error) {
 
-        return new Response(JSON.stringify({ stack:error.stack, success: false, msg: error.message  }), {
+        return new Response(JSON.stringify({ success: false, msg: error.message  }), {
             headers: {
                 "Content-Type": "application/json"
             },
             status: 200
         });
 
-    }finally{
-
+    } finally{
+        if(connection){
+            connection.end()
+        }
     }
 }

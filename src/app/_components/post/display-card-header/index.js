@@ -32,6 +32,10 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import OutlinedFlagIcon from '@mui/icons-material/OutlinedFlag';
 import EditPostButton from "../../modals/edit-post";
 import DeletePostButton from "../../modals/delete-post";
+import { SupportButton } from "../../modals/support-artist";
+
+
+
 
 function generatePopoverContent(p){
   return(
@@ -45,18 +49,23 @@ function generatePopoverContent(p){
                       <DeletePostButton post={p} />
                     </>
                   ): (
-                    <></>
+                    <>
+                      <SupportButton 
+                        type={'list_item'} 
+                        toBeSupportedID={p.posted_by_username} 
+                        firstName={p.posted_by_name.split(' ')[0].toUpperCase()} 
+                      />
+                      <ListItem disablePadding>
+                          <ListItemButton>
+                              <ListItemIcon>
+                                  <OutlinedFlagIcon />
+                              </ListItemIcon>
+                              <ListItemText primary="Report" />
+                          </ListItemButton>
+                      </ListItem>
+                    </>
                   )
                 }
-
-                <ListItem disablePadding>
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <OutlinedFlagIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Report" />
-                    </ListItemButton>
-                </ListItem>
               </List>
           </nav>
       </Box>

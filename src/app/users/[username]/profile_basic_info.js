@@ -12,7 +12,7 @@ import { Button } from '@mui/joy';
 import EditIcon from '@mui/icons-material/Edit';
 import { useRouter } from 'next/navigation';
 import PaypalButton from '@/app/_components/_payment_buttons/_paypal';
-import SupportButton from '@/app/_components/modals/support-artist';
+import { SupportButton } from '@/app/_components/modals/support-artist';
 
 
 export default function ProfileBasicInfo({username}){
@@ -140,9 +140,8 @@ export default function ProfileBasicInfo({username}){
                                 >
                                     {isFollowing ? 'Following' : 'Follow'}
                                 </Button>
-                                <SupportButton toBeSupportedID={username} firstName={basicInfo.userInfo.name.split(' ')[0].toUpperCase()} />
+                                <SupportButton type={'button'} toBeSupportedID={username} firstName={basicInfo.userInfo.name.split(' ')[0].toUpperCase()} />
                             </Stack>
-
                         ): (
                             <Button 
                                 variant={'solid'} 

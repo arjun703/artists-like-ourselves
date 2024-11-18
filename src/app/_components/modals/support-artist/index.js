@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogTitle, IconButton, Box, Stack, Divider, Typography } from '@mui/material';
+import { Dialog, DialogContent, DialogTitle, IconButton, Box, Stack, Divider, Typography, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 
 import { Button as BtnJoy } from '@mui/joy';
 import CloseIcon from '@mui/icons-material/Close';
@@ -16,7 +16,7 @@ import toast from 'react-hot-toast';
 import PaypalButton from '../../_payment_buttons/_paypal';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import WarningIcon from '@mui/icons-material/Warning';
-
+import RecommendIcon from '@mui/icons-material/Recommend';
 
 const SupportModal = ({ open, handleClose, firstName, toBeSupportedID }) => {
   const [selectedOption, setSelectedOption] = useState('coffee'); // Default selection
@@ -244,24 +244,39 @@ const SupportModal = ({ open, handleClose, firstName, toBeSupportedID }) => {
 
 
 
-const SupportButton = ({firstName, toBeSupportedID}) => {
+export const SupportButton = ({firstName, toBeSupportedID, type}) => {
 
   const [open, setOpen] = useState(false);
   
   const handleOpen = () => setOpen(true);
   const handleClose = () =>setOpen(false)
 
+
   return (
     <>
-      <BtnJoy
-        onClick={handleOpen}
-        variant='solid'
-      >
-        Support Me
-      </BtnJoy>
+      {
+        type === 'button' ? (
+          <BtnJoy
+            onClick={handleOpen}
+            variant='solid'
+          >
+            Support Me
+          </BtnJoy>
+        ): (
+          <ListItem  onClick={handleOpen} disablePadding>
+            <ListItemButton>
+                <ListItemIcon>
+                    <RecommendIcon />
+                </ListItemIcon>
+                <ListItemText primary= {'Support ' + firstName} />
+            </ListItemButton>
+        </ListItem>
+        )
+      }
       <SupportModal toBeSupportedID={toBeSupportedID} firstName={firstName} open={open} handleClose={handleClose}  />
     </>
   );
+
 };
 
-export default SupportButton;
+

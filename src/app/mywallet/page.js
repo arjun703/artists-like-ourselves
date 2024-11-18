@@ -10,14 +10,20 @@ import Link from "next/link";
 export default function User({params}){
 
     const [wallet, setWallet] = useState([])
-    const [isLoading, setIsLoading] = useState(false) 
+    const [isLoading, setIsLoading] = useState(true) 
 
     useEffect(()=> {
-
         async function fetchData(){
-            const wallet = await fetch('/api/mywallet')
-            const walletJSON = await wallet.json()
-            setWallet(walletJSON) 
+            try{
+                setIsLoading(true)
+                const wallet = await fetch('/api/mywallet')
+                const walletJSON = await wallet.json()
+                setWallet(walletJSON) 
+            }catch(error){
+                
+            }finally{
+                setIsLoading(false)
+            }
         }
 
         fetchData()

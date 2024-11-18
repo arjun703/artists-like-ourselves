@@ -42,6 +42,18 @@ CREATE table post_likes (
 `,
 
 `
+CREATE TABLE supports (
+	id INT PRIMARY KEY auto_increment,
+	supported_by VARCHAR(255),
+    supported_to VARCHAR(255),
+	FOREIGN KEY (supported_by) REFERENCES users(username) ON DELETE CASCADE,
+    FOREIGN KEY (supported_to) REFERENCES users(username) ON DELETE CASCADE,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    amount float
+);
+`,
+
+`
 
 CREATE table post_comments ( 
 	id INT PRIMARY KEY auto_increment, 

@@ -11,6 +11,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import { Button } from '@mui/joy';
 import EditIcon from '@mui/icons-material/Edit';
 import { useRouter } from 'next/navigation';
+import PaypalButton from '@/app/_components/_payment_buttons/_paypal';
+import SupportButton from '@/app/_components/modals/support-artist';
 
 
 export default function ProfileBasicInfo({username}){
@@ -128,15 +130,19 @@ export default function ProfileBasicInfo({username}){
                 <div>
                     {
                         basicInfo.viewing_oneself !== true ? (
-                            <Button 
-                                color={isFollowing ? 'success': 'primary'} 
-                                variant={'solid'} 
-                                sx={{display:'inline-flex'}}
-                                startDecorator={isFollowing ? <CheckIcon /> : <AddIcon /> }
-                                onClick={isFollowingOrUnfollowing ? () => {} :  handleFollowUnfollow}
-                            >
-                                {isFollowing ? 'Following' : 'Follow'}
-                            </Button>
+                            <Stack direction={'row'} gap={'10px'}>
+                                <Button 
+                                    color={isFollowing ? 'success': 'primary'} 
+                                    variant={'solid'} 
+                                    sx={{display:'inline-flex'}}
+                                    startDecorator={isFollowing ? <CheckIcon /> : <AddIcon /> }
+                                    onClick={isFollowingOrUnfollowing ? () => {} :  handleFollowUnfollow}
+                                >
+                                    {isFollowing ? 'Following' : 'Follow'}
+                                </Button>
+                                <SupportButton toBeSupportedID={username} firstName={basicInfo.userInfo.name.split(' ')[0].toUpperCase()} />
+                            </Stack>
+
                         ): (
                             <Button 
                                 variant={'solid'} 

@@ -1,6 +1,6 @@
 'use client';
 import { Button } from "@mui/joy";
-import { Skeleton } from "@mui/material";
+import { Skeleton, Stack } from "@mui/material";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
@@ -38,8 +38,12 @@ export default function Header() {
                         <Skeleton width={250} height={40}></Skeleton>
                     ) : (
                         isLoggedIn
-                            ? (
-                                <Button sx={{ minWidth: '250px' }} onClick={logOut}>Log Out</Button>
+                            ? (<Stack direction={'row'} gap={'20px'}>
+                                                            <Button sx={{ minWidth: '250px' }} onClick={logOut}>Log Out</Button>
+                                                            <Link href={'/mywallet'} ><Button>My Wallet</Button></Link> 
+                                                            <Link href={'/'} ><Button>Home</Button></Link> 
+                                    
+                                </Stack>
                             ) : (
                                 <Link href="/login">
                                     <Button sx={{ minWidth: '250px' }}>Sign In</Button>

@@ -1,4 +1,5 @@
 import { databaseConnection, executeQuery, getLoggedInUsername } from "../utils";
+export const dynamic = "force-dynamic";
 
 export async function GET(){
     let connection = false

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogTitle, IconButton, Box, Stack, Divider, Typography, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 import { Button as BtnJoy } from '@mui/joy';
 import CloseIcon from '@mui/icons-material/Close';
@@ -266,7 +267,7 @@ export const SupportButton = ({firstName, toBeSupportedID, type}) => {
           <ListItem  onClick={handleOpen} disablePadding>
             <ListItemButton>
                 <ListItemIcon>
-                    <RecommendIcon />
+                    <FavoriteIcon />
                 </ListItemIcon>
                 <ListItemText primary= {'Support ' + firstName} />
             </ListItemButton>

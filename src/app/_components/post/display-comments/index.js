@@ -6,8 +6,9 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import SendIcon from '@mui/icons-material/Send';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
+import { SupportButton } from "../../modals/support-artist";
 
-export default function DisplayComments({ commentsSubmitCallback, post_id}) {
+export default function DisplayComments({ commentsSubmitCallback, post: {is_editable, id: post_id, posted_by_name, posted_by_username } }) {
 
     const [comments, setComments] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -73,9 +74,30 @@ export default function DisplayComments({ commentsSubmitCallback, post_id}) {
 
   return (
     <div style={{ marginTop: "10px" }}>
-      <Divider>
-        <Typography>Comments</Typography>
-      </Divider>
+
+      <Divider />
+
+      {
+        is_editable !== 1   && (
+          <>
+            <div style={{display:'flex', justifyContent:'center'}}>
+              <div>
+                <SupportButton 
+                  type={'list_item'} 
+                  toBeSupportedID={posted_by_username} 
+                  firstName={posted_by_name.split(' ')[0].toUpperCase()} 
+                />
+              </div>      
+
+
+            </div>
+            <Divider/>
+
+          </>
+        ) || ''
+      }
+
+
       <div 
         style={{
             display:'flex', 
@@ -103,7 +125,13 @@ export default function DisplayComments({ commentsSubmitCallback, post_id}) {
             </IconButton>
       </div>
 
-      <div style={{ padding: "10px"}}>
+      { comments.length > 0 && (
+      <Divider>Comments</Divider>
+      ) || ''}
+
+
+      <div style={{ padding: comments.length > 0 ? "15px" : '5px'}}>
+
         <Grid container spacing={2}>
           {comments.map((comment, index) => (
             <Grid
@@ -136,14 +164,11 @@ export default function DisplayComments({ commentsSubmitCallback, post_id}) {
 
         {moreDataExists && (
           <div style={{ display: "flex", justifyContent: "center", marginTop: '10px' }}>
-            <Button loading={isLoading} onClick={increaseLikesPageNumber}>
+            <Button loading={isLoading} variant={'plain'} onClick={increaseLikesPageNumber}>
               View More 
             </Button>
           </div>
         )}
-
-
-
       </div>
     </div>
   );

@@ -22,6 +22,7 @@
     "@mui/material": "^5.15.12",
     "@mui/x-date-pickers": "^7.1.0",
     "@paypal/checkout-server-sdk": "^1.0.3",
+    "@paypal/payouts-sdk": "^1.1.1",
     "@react-oauth/google": "^0.12.1",
     "@supabase/supabase-js": "^2.44.2",
     "bcryptjs": "^2.4.3",

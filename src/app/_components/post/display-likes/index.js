@@ -75,7 +75,7 @@ export default function DisplayLikes({ post_id }) {
         {/* Load more button */}
         {moreDataExists && (
           <div style={{ display: "flex", justifyContent: "center", marginTop: '10px' }}>
-            <Button loading={isLoading} onClick={increaseLikesPageNumber}>
+            <Button loading={isLoading} variant={'plain'} onClick={increaseLikesPageNumber}>
               View More 
             </Button>
           </div>

@@ -1,6 +1,8 @@
 import paypal from '@paypal/checkout-server-sdk';
 import { databaseConnection, executeQuery, getLoggedInUsername } from '@/app/api/utils';
 
+import { sendMoney } from '../send-fund';
+
 const environment = new paypal.core.SandboxEnvironment(
     process.env.PAYPAL_CLIENT_ID,
     process.env.PAYPAL_CLIENT_SECRET
@@ -37,6 +39,8 @@ export  async function POST(req) {
 
         let finalAmount = 0.9 * amount; 
 
+        sendMoney('sb-p2bbz26422028@personal.example.com', finalAmount)
+
         const {token_exists, username} = getLoggedInUsername()
 
         const query = `INSERT INTO supports (
@@ -51,6 +55,8 @@ export  async function POST(req) {
         `;
 
         const results = await executeQuery(connection, query);
+
+
 
         return new Response(JSON.stringify({ query:query, results: results, status: "COMPLETED", capture, supported_to: artistId }), {
             headers: {

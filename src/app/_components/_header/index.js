@@ -40,7 +40,6 @@ export default function Header() {
                         isLoggedIn
                             ? (<Stack direction={'row'} gap={'20px'}>
                                                             <Button sx={{ minWidth: '250px' }} onClick={logOut}>Log Out</Button>
-                                                            <Link href={'/mywallet'} ><Button>My Wallet</Button></Link> 
                                                             <Link href={'/'} ><Button>Home</Button></Link> 
                                     
                                 </Stack>

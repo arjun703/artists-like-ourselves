@@ -75,7 +75,7 @@ export default function Post({post}) {
                 :   displayType == 'comments'
                         ? <DisplayComments
                         commentsSubmitCallback={() => commentsSubmitCallback()} 
-                        post_id={p.id}
+                        post={p}
                           />
                         : <></>
         }

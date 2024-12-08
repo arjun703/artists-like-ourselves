@@ -9,8 +9,6 @@ const environment = new paypal.core.SandboxEnvironment(
 
 const client = new paypal.core.PayPalHttpClient(environment);
 
-
-
 export  async function POST(req) {
 
     const { amount, artistId } = await req.json(); // Get artistId from request body

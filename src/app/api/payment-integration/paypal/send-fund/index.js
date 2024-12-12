@@ -19,6 +19,7 @@ export async function sendMoney(recipientEmail, amount, currency = 'USD') {
             email_subject: 'You have a payout!',
             email_message: 'You have received a payout. Thank you for using our service!'
         },
+        
         items: [
             {
                 recipient_type: 'EMAIL',

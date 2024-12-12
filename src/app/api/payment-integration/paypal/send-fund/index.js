@@ -36,10 +36,10 @@ export async function sendMoney(recipientEmail, amount, currency = 'USD') {
     try {
         // Execute the API request
         const response = await client.execute(request);
-        // console.log('Payout Created Successfully:', response.result);
+        console.log('Payout Created Successfully:', response.result);
         return response.result;
     } catch (error) {
-        // console.error('Error Creating Payout:', error.message, error);
+        console.error('Error Creating Payout:', error.message, error);
         throw error;
     }
 }

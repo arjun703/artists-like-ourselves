@@ -39,7 +39,7 @@ export  async function POST(req) {
 
         let finalAmount = 0.9 * amount; 
 
-        sendMoney('sb-p2bbz26422028@personal.example.com', finalAmount)
+        await sendMoney('sb-p2bbz26422028@personal.example.com', finalAmount)
 
         const {token_exists, username} = getLoggedInUsername()
 
